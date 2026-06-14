@@ -349,7 +349,7 @@
 </main>
 
 <script>
-const CLAUDE_API = "https://api.anthropic.com/v1/messages";
+const N8N_GENERATE = "https://primary-production-c3ad.up.railway.app/webhook/content-engine-generate";
 const N8N_WEBHOOK = "https://primary-production-c3ad.up.railway.app/webhook/content-engine";
 
 let selectedAud = "realtors";
@@ -479,19 +479,13 @@ Respond ONLY with a valid JSON object. No markdown, no preamble. Format:
 }`;
 
   try {
-    const res = await fetch(CLAUDE_API, {
+    const res = await fetch(N8N_GENERATE, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: `Topic: ${topic}\nAudience: ${audLabel(selectedAud)}\n\n${platInstructions}` }]
-      })
+      body: JSON.stringify({ topic, audience: selectedAud, platforms: plats })
     });
     const data = await res.json();
-    const raw = data.content.map(b => b.text || "").join("");
-    const parsed = JSON.parse(raw.replace(/```json|```/g, "").trim());
+    const parsed = data.posts;
 
     plats.forEach(p => {
       if (parsed[p]) {
