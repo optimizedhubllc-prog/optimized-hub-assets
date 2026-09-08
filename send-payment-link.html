@@ -173,11 +173,16 @@
         </div>
       </div>
 
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;cursor:pointer;">
+        <input type="checkbox" id="send-email-toggle" checked style="margin:0;">
+        Email this link to the client automatically
+      </label>
+
       <button type="button" class="btn" id="generate-btn" disabled>Select a rate to continue</button>
     </div>
 
     <div id="result">
-      <p class="r-label">Checkout link ready</p>
+      <p class="r-label" id="result-label">Sent</p>
       <p class="r-tier" id="result-tier"></p>
       <div class="link-box">
         <input type="text" id="result-link" readonly>
@@ -214,7 +219,7 @@ document.querySelectorAll('.tier-card').forEach(card => {
 function updateButtonState(){
   if(selectedTier && emailInput.value.trim()){
     generateBtn.disabled = false;
-    generateBtn.textContent = 'Generate checkout link';
+    generateBtn.textContent = document.getElementById('send-email-toggle').checked ? 'Generate & send link' : 'Generate link';
   } else if(!selectedTier){
     generateBtn.disabled = true;
     generateBtn.textContent = 'Select a rate to continue';
@@ -224,6 +229,7 @@ function updateButtonState(){
   }
 }
 emailInput.addEventListener('input', updateButtonState);
+document.getElementById('send-email-toggle').addEventListener('change', updateButtonState);
 
 generateBtn.addEventListener('click', async () => {
   document.getElementById('error-box').style.display = 'none';
@@ -231,18 +237,21 @@ generateBtn.addEventListener('click', async () => {
   generateBtn.textContent = 'Generating...';
 
   try{
+    const willSendEmail = document.getElementById('send-email-toggle').checked;
     const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         tier_key: selectedTier,
         client_name: document.getElementById('client_name').value.trim(),
-        client_email: emailInput.value.trim()
+        client_email: emailInput.value.trim(),
+        send_email: willSendEmail
       })
     });
     const data = await res.json();
     if(!res.ok || data.error) throw new Error(data.message || 'Failed to generate link');
 
+    document.getElementById('result-label').textContent = data.email_sent ? 'Sent to client' : 'Link ready (not emailed)';
     document.getElementById('result-tier').textContent = data.tier_label + (data.client_name ? '  \u2014  for ' + data.client_name : '');
     document.getElementById('result-link').value = data.checkout_url;
     document.getElementById('result').style.display = 'block';
@@ -253,7 +262,7 @@ generateBtn.addEventListener('click', async () => {
     box.style.display = 'block';
   }finally{
     generateBtn.disabled = false;
-    generateBtn.textContent = 'Generate checkout link';
+    updateButtonState();
   }
 });
 
