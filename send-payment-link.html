@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Payment Link — Optimized Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cobalt:#2563EB;
+    --copper:#C17B3C;
+    --copper-light:#D4933F;
+    --ink:#111827;
+    --ink-soft:#1F2937;
+    --pearl:#F8FAFC;
+    --line:#E5E9F0;
+    --muted:#6B7280;
+    --ok:#16A34A;
+    --danger:#DC2626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--pearl);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,.wordmark{font-family:'Plus Jakarta Sans',sans-serif;}
+  button{font-family:'Inter',sans-serif;}
+
+  header{background:var(--ink);padding:20px 0;}
+  .header-inner{max-width:760px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand svg{width:30px;height:30px;}
+  .wordmark{font-size:16px;font-weight:800;color:#F8FAFC;}
+  .tagline-header{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--copper-light);}
+
+  .hero{background:linear-gradient(180deg,var(--ink) 0%, var(--ink) 32%, var(--pearl) 32%);padding:0 0 40px;}
+  .hero-inner{max-width:760px;margin:0 auto;padding:32px 24px 0;color:#F8FAFC;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--copper-light);margin:0 0 8px;}
+  .hero h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.25;}
+  .hero-sub{font-size:13.5px;color:#CBD5E1;margin:0;max-width:520px;line-height:1.6;}
+
+  .card-wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+  .card{background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(17,24,39,0.10);padding:32px;}
+
+  .section-label{font-size:12.5px;font-weight:700;color:var(--ink);margin:0 0 12px;}
+
+  .field{margin-bottom:22px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .field input{
+    width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);
+    font-size:14.5px;color:var(--ink);font-family:'Inter',sans-serif;background:#fff;
+  }
+  .field input:focus{outline:none;border-color:var(--cobalt);}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+  .tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px;}
+  .tier-card{
+    border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .15s ease;
+  }
+  .tier-card:hover{border-color:#CBD5E1;}
+  .tier-card.selected{border-color:var(--cobalt);background:#EFF4FF;}
+  .tier-name{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .tier-price{font-size:18px;font-weight:800;color:var(--cobalt);margin:0 0 3px;}
+  .tier-note{font-size:11.5px;color:var(--muted);margin:0;}
+
+  .btn{
+    width:100%;font-size:14.5px;font-weight:700;padding:14px 26px;border-radius:8px;border:none;cursor:pointer;
+    background:var(--cobalt);color:#fff;transition:opacity .15s ease;
+  }
+  .btn:hover{opacity:0.9;}
+  .btn:disabled{background:#CBD5E1;cursor:not-allowed;}
+
+  #result{display:none;margin-top:24px;padding:20px;background:var(--pearl);border-radius:12px;}
+  #result .r-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin:0 0 8px;}
+  #result .r-tier{font-size:13.5px;color:var(--ink);margin:0 0 14px;font-weight:600;}
+  .link-box{display:flex;gap:8px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;}
+  .link-box input{flex:1;border:none;font-size:13px;color:var(--ink);background:transparent;font-family:monospace;}
+  .link-box input:focus{outline:none;}
+  .copy-btn{
+    flex-shrink:0;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:6px;border:none;cursor:pointer;
+    background:var(--ink);color:#fff;
+  }
+  .copy-btn.copied{background:var(--ok);}
+
+  .error-box{display:none;margin-top:20px;padding:16px;background:#FEF2F2;border-radius:10px;color:var(--danger);font-size:13.5px;}
+
+  footer{max-width:760px;margin:0 auto;padding:28px 24px 50px;text-align:center;}
+  footer p{margin:0;font-size:11.5px;color:var(--muted);}
+  footer .tag{color:var(--copper-light);font-weight:600;}
+
+  @media (max-width:560px){
+    .tier-grid{grid-template-columns:1fr;}
+    .field-row{grid-template-columns:1fr;}
+    .card{padding:24px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="8" r="4" fill="#2563EB"/>
+        <circle cx="8" cy="30" r="4" fill="#C17B3C"/>
+        <circle cx="32" cy="30" r="4" fill="#2563EB"/>
+        <line x1="20" y1="8" x2="8" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+        <line x1="20" y1="8" x2="32" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+        <line x1="8" y1="30" x2="32" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+      </svg>
+      <div>
+        <div class="wordmark">Optimized Hub</div>
+        <div class="tagline-header">Engineered Logic. Systematic Growth.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Internal Tool</p>
+    <h1>Send a payment link.</h1>
+    <p class="hero-sub">Pick the right rate, enter their info, and get a one-time checkout link with their email already filled in — no static links to keep track of.</p>
+  </div>
+</section>
+
+<div class="card-wrap">
+  <div class="card">
+
+    <div id="form-root">
+      <p class="section-label">Client details</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="client_name">Client name</label>
+          <input type="text" id="client_name" placeholder="Jane Rodriguez">
+        </div>
+        <div class="field">
+          <label for="client_email">Client email</label>
+          <input type="email" id="client_email" placeholder="jane@example.com" required>
+        </div>
+      </div>
+
+      <p class="section-label">Rate</p>
+      <div class="tier-grid" id="tier-grid">
+        <div class="tier-card" data-tier="dr_onboard1">
+          <p class="tier-name">DR — Onboard 1 Network</p>
+          <p class="tier-price">$247<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">30-day free trial</p>
+        </div>
+        <div class="tier-card" data-tier="dr_crm_onboard1">
+          <p class="tier-name">DR + CRM — Onboard 1 Network</p>
+          <p class="tier-price">$297<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">30-day free trial</p>
+        </div>
+        <div class="tier-card" data-tier="dr_standard">
+          <p class="tier-name">DR — Standard</p>
+          <p class="tier-price">$397<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">General market, no trial</p>
+        </div>
+        <div class="tier-card" data-tier="dr_crm_standard">
+          <p class="tier-name">DR + CRM — Standard</p>
+          <p class="tier-price">$547<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">General market, no trial</p>
+        </div>
+        <div class="tier-card" data-tier="founding_partner">
+          <p class="tier-name">Founding Partner</p>
+          <p class="tier-price">$147<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">Jorge's personal rate</p>
+        </div>
+        <div class="tier-card" data-tier="personal">
+          <p class="tier-name">Personal Rate</p>
+          <p class="tier-price">$97<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></p>
+          <p class="tier-note">Beta / personal contact</p>
+        </div>
+      </div>
+
+      <button type="button" class="btn" id="generate-btn" disabled>Select a rate to continue</button>
+    </div>
+
+    <div id="result">
+      <p class="r-label">Checkout link ready</p>
+      <p class="r-tier" id="result-tier"></p>
+      <div class="link-box">
+        <input type="text" id="result-link" readonly>
+        <button type="button" class="copy-btn" id="copy-btn">Copy</button>
+      </div>
+    </div>
+
+    <div class="error-box" id="error-box"></div>
+
+  </div>
+</div>
+
+<footer>
+  <p>OPTIMIZED HUB LLC &nbsp;&middot;&nbsp; <span class="tag">Engineered Logic. Systematic Growth.</span></p>
+  <p style="margin-top:6px;">Internal tool — not for public distribution.</p>
+</footer>
+
+<script>
+const WEBHOOK_URL = 'https://primary-production-c3ad.up.railway.app/webhook/generate-payment-link';
+let selectedTier = null;
+
+const generateBtn = document.getElementById('generate-btn');
+const emailInput = document.getElementById('client_email');
+
+document.querySelectorAll('.tier-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedTier = card.dataset.tier;
+    updateButtonState();
+  });
+});
+
+function updateButtonState(){
+  if(selectedTier && emailInput.value.trim()){
+    generateBtn.disabled = false;
+    generateBtn.textContent = 'Generate checkout link';
+  } else if(!selectedTier){
+    generateBtn.disabled = true;
+    generateBtn.textContent = 'Select a rate to continue';
+  } else {
+    generateBtn.disabled = true;
+    generateBtn.textContent = 'Enter client email to continue';
+  }
+}
+emailInput.addEventListener('input', updateButtonState);
+
+generateBtn.addEventListener('click', async () => {
+  document.getElementById('error-box').style.display = 'none';
+  generateBtn.disabled = true;
+  generateBtn.textContent = 'Generating...';
+
+  try{
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        tier_key: selectedTier,
+        client_name: document.getElementById('client_name').value.trim(),
+        client_email: emailInput.value.trim()
+      })
+    });
+    const data = await res.json();
+    if(!res.ok || data.error) throw new Error(data.message || 'Failed to generate link');
+
+    document.getElementById('result-tier').textContent = data.tier_label + (data.client_name ? '  \u2014  for ' + data.client_name : '');
+    document.getElementById('result-link').value = data.checkout_url;
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('result').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }catch(err){
+    const box = document.getElementById('error-box');
+    box.textContent = 'Something went wrong generating this link. Try again, or send the static link from your records instead.';
+    box.style.display = 'block';
+  }finally{
+    generateBtn.disabled = false;
+    generateBtn.textContent = 'Generate checkout link';
+  }
+});
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const input = document.getElementById('result-link');
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+});
+</script>
+</body>
+</html>
