@@ -240,7 +240,7 @@ generateBtn.addEventListener('click', async () => {
     const willSendEmail = document.getElementById('send-email-toggle').checked;
     const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type':'application/json', 'x-oh-key':'KqK3XMBDPKekeOh25bhLSRAeJx7hWiQhqDfC_fSnOO4'},
       body: JSON.stringify({
         tier_key: selectedTier,
         client_name: document.getElementById('client_name').value.trim(),
