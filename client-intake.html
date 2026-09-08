@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Intake — Optimized Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cobalt:#2563EB;
+    --copper:#C17B3C;
+    --copper-light:#D4933F;
+    --ink:#111827;
+    --ink-soft:#1F2937;
+    --pearl:#F8FAFC;
+    --line:#E5E9F0;
+    --muted:#6B7280;
+    --ok:#16A34A;
+    --danger:#DC2626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--pearl);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.wordmark{font-family:'Plus Jakarta Sans',sans-serif;}
+  button{font-family:'Inter',sans-serif;}
+
+  /* ===== HEADER ===== */
+  header{background:var(--ink);padding:20px 0;}
+  .header-inner{max-width:720px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand svg{width:30px;height:30px;}
+  .wordmark{font-size:16px;font-weight:800;color:#F8FAFC;}
+  .tagline-header{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--copper-light);}
+
+  /* ===== HERO ===== */
+  .hero{background:linear-gradient(180deg,var(--ink) 0%, var(--ink) 40%, var(--pearl) 40%);padding:0 0 48px;}
+  .hero-inner{max-width:720px;margin:0 auto;padding:36px 24px 0;color:#F8FAFC;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--copper-light);margin:0 0 10px;}
+  .hero h1{font-size:26px;font-weight:800;margin:0 0 8px;line-height:1.25;}
+  .hero-sub{font-size:14px;color:#CBD5E1;margin:0 0 32px;max-width:520px;line-height:1.6;}
+
+  /* ===== WIZARD CARD ===== */
+  .wizard-card{
+    max-width:720px;margin:0 auto;padding:0 24px;
+  }
+  .card-inner{
+    background:#fff;border-radius:16px;border:1px solid var(--line);
+    box-shadow:0 8px 24px rgba(17,24,39,0.10);
+    padding:36px;
+  }
+
+  /* progress */
+  .progress{display:flex;align-items:center;gap:0;margin-bottom:32px;}
+  .progress-step{display:flex;align-items:center;gap:10px;flex:1;}
+  .progress-dot{
+    width:28px;height:28px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;
+    background:var(--pearl);color:var(--muted);border:1.5px solid var(--line);
+    transition:all .25s ease;
+  }
+  .progress-step.active .progress-dot{background:var(--cobalt);border-color:var(--cobalt);color:#fff;}
+  .progress-step.done .progress-dot{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .progress-label{font-size:12.5px;font-weight:600;color:var(--muted);}
+  .progress-step.active .progress-label{color:var(--ink);}
+  .progress-line{flex:0.5;height:1.5px;background:var(--line);margin:0 2px;}
+  .progress-line.done{background:var(--ink);}
+
+  /* form */
+  .step{display:none;}
+  .step.active{display:block;animation:fadeIn .35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .step h2{font-size:19px;font-weight:800;margin:0 0 6px;color:var(--ink);}
+  .step-sub{font-size:13.5px;color:var(--muted);margin:0 0 26px;line-height:1.6;}
+
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .field .hint{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5;}
+  .field input[type=text],
+  .field input[type=email],
+  .field input[type=tel],
+  .field select,
+  .field textarea{
+    width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);
+    font-size:14.5px;color:var(--ink);font-family:'Inter',sans-serif;background:#fff;
+    transition:border-color .15s ease;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:none;border-color:var(--cobalt);
+  }
+  .field textarea{resize:vertical;min-height:88px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+  .role-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .role-option{
+    border:1.5px solid var(--line);border-radius:8px;padding:12px 8px;text-align:center;
+    cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .15s ease;
+  }
+  .role-option.selected{border-color:var(--cobalt);color:var(--cobalt);background:#EFF4FF;}
+
+  .btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:32px;}
+  .btn{
+    font-size:14.5px;font-weight:700;padding:13px 26px;border-radius:8px;border:none;cursor:pointer;
+    transition:opacity .15s ease;
+  }
+  .btn:hover{opacity:0.9;}
+  .btn-primary{background:var(--cobalt);color:#fff;}
+  .btn-ghost{background:transparent;color:var(--muted);padding:13px 8px;}
+  .btn-primary:disabled{background:#CBD5E1;cursor:not-allowed;}
+
+  /* review */
+  .review-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border-radius:10px;overflow:hidden;border:1px solid var(--line);margin-bottom:22px;}
+  .review-row{background:#fff;padding:13px 16px;display:flex;justify-content:space-between;gap:16px;}
+  .review-row .r-label{font-size:12.5px;color:var(--muted);}
+  .review-row .r-value{font-size:13.5px;font-weight:600;color:var(--ink);text-align:right;}
+
+  .consent{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;background:var(--pearl);border-radius:10px;margin-bottom:6px;}
+  .consent input{margin-top:3px;flex-shrink:0;}
+  .consent label{font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+
+  .error-text{font-size:12px;color:var(--danger);margin-top:6px;display:none;}
+
+  /* success state */
+  #success-state{display:none;text-align:center;padding:20px 8px;}
+  .check-circle{
+    width:56px;height:56px;border-radius:50%;background:#F0FDF4;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  #success-state h2{font-size:20px;margin:0 0 10px;}
+  #success-state p{font-size:14px;color:var(--muted);line-height:1.7;max-width:420px;margin:0 auto;}
+
+  footer{max-width:720px;margin:0 auto;padding:32px 24px 60px;text-align:center;}
+  footer p{margin:0;font-size:11.5px;color:var(--muted);}
+  footer .tag{color:var(--copper-light);font-weight:600;}
+
+  @media (max-width:560px){
+    .hero h1{font-size:22px;}
+    .card-inner{padding:26px 20px;}
+    .field-row{grid-template-columns:1fr;}
+    .role-picker{grid-template-columns:1fr;}
+    .progress-label{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="8" r="4" fill="#2563EB"/>
+        <circle cx="8" cy="30" r="4" fill="#C17B3C"/>
+        <circle cx="32" cy="30" r="4" fill="#2563EB"/>
+        <line x1="20" y1="8" x2="8" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+        <line x1="20" y1="8" x2="32" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+        <line x1="8" y1="30" x2="32" y2="30" stroke="#F8FAFC" stroke-width="1.6"/>
+      </svg>
+      <div>
+        <div class="wordmark">Optimized Hub</div>
+        <div class="tagline-header">Engineered Logic. Systematic Growth.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Client Intake</p>
+    <h1 id="hero-title">Let's get your build started.</h1>
+    <p class="hero-sub">Three short steps — about five minutes. Everything here goes straight to our build queue, so the faster you fill it out, the faster your Database Reactivation system goes live.</p>
+  </div>
+</section>
+
+<div class="wizard-card">
+  <div class="card-inner">
+
+    <div id="form-root">
+      <div class="progress" id="progress"></div>
+
+      <form id="intake-form">
+        <!-- STEP 1 -->
+        <div class="step active" data-step="1">
+          <h2>About you and your business</h2>
+          <p class="step-sub">So we know who we're building for.</p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="full_name">Full name</label>
+              <input type="text" id="full_name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" required placeholder="(813) 555-0100">
+            </div>
+            <div class="field">
+              <label for="business_name">Business / brokerage name</label>
+              <input type="text" id="business_name" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Your role</label>
+            <div class="role-picker" id="role-picker">
+              <div class="role-option" data-role="Loan Officer">Loan Officer</div>
+              <div class="role-option" data-role="Broker">Broker</div>
+              <div class="role-option" data-role="Owner">Owner</div>
+            </div>
+            <div class="error-text" id="role-error">Pick one so we set your account up right.</div>
+          </div>
+
+          <div class="btn-row">
+            <span></span>
+            <button type="button" class="btn btn-primary" id="to-step-2">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2">
+          <h2>Your database and your voice</h2>
+          <p class="step-sub">This is what actually shapes your reactivation sequence — the more specific, the better it sounds like you, not a script.</p>
+
+          <div class="field">
+            <label for="lead_count">Roughly how many dormant leads are in your database?</label>
+            <select id="lead_count" required>
+              <option value="" disabled selected>Select a range</option>
+              <option value="Under 100">Under 100</option>
+              <option value="100-300">100–300</option>
+              <option value="300-750">300–750</option>
+              <option value="750+">750+</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="crm_source">Where does your database currently live?</label>
+            <input type="text" id="crm_source" placeholder="e.g. LenderD, a spreadsheet, my phone contacts" required>
+            <div class="hint">Whatever it is — we'll figure out the export together on our first call.</div>
+          </div>
+
+          <div class="field">
+            <label for="voice_notes">How should outreach sound when it reaches your leads? <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+            <textarea id="voice_notes" placeholder="e.g. warm and casual, no exclamation points, I always use first names"></textarea>
+            <div class="hint">Leave this blank and we'll use a warm, direct default tone.</div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="to-step-1">Back</button>
+            <button type="button" class="btn btn-primary" id="to-step-3">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
+          <h2>Confirm and submit</h2>
+          <p class="step-sub">Take a second look — then you're in the queue.</p>
+
+          <div class="review-list" id="review-list"></div>
+
+          <div class="consent">
+            <input type="checkbox" id="consent" required>
+            <label for="consent">I confirm the leads in this database are my own past contacts, and I have the right to re-engage them by SMS and email under applicable law (TCPA and equivalent).</label>
+          </div>
+          <div class="error-text" id="consent-error">We need this checked before we can start outreach on your behalf.</div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="to-step-2-back">Back</button>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Submit intake</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="success-state">
+      <div class="check-circle">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 12.5L10 17.5L19 6.5" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2>You're in the queue.</h2>
+      <p>We've got everything we need. Pedro will reach out within one business day to confirm your build timeline. Questions in the meantime? Just reply to your onboarding email.</p>
+    </div>
+
+    <div id="error-state" style="display:none;text-align:center;padding:20px 8px;">
+      <h2 style="font-size:19px;">Something went wrong submitting this.</h2>
+      <p style="font-size:13.5px;color:var(--muted);">Your answers are still on this page — try submitting again, or reply to your onboarding email and we'll get it manually.</p>
+      <button type="button" class="btn btn-primary" id="retry-btn" style="margin-top:14px;">Try again</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>OPTIMIZED HUB LLC &nbsp;&middot;&nbsp; <span class="tag">Engineered Logic. Systematic Growth.</span></p>
+</footer>
+
+<script>
+// ===== CONFIG =====
+const WEBHOOK_URL = 'https://primary-production-c3ad.up.railway.app/webhook/client-intake-submit';
+
+// ===== STATE =====
+const state = {
+  full_name: '', email: '', phone: '', business_name: '', role: '',
+  lead_count: '', crm_source: '', voice_notes: ''
+};
+let currentStep = 1;
+
+// pre-fill from query params (link can pass ?name=&email=)
+const qp = new URLSearchParams(window.location.search);
+if(qp.get('name')) document.getElementById('full_name').value = decodeURIComponent(qp.get('name'));
+if(qp.get('email')) document.getElementById('email').value = decodeURIComponent(qp.get('email'));
+
+const steps = document.querySelectorAll('.step');
+const progressEl = document.getElementById('progress');
+const stepLabels = ['About you', 'Database & voice', 'Confirm'];
+
+function renderProgress(){
+  progressEl.innerHTML = '';
+  stepLabels.forEach((label, i) => {
+    const n = i + 1;
+    const wrap = document.createElement('div');
+    wrap.className = 'progress-step' + (n === currentStep ? ' active' : '') + (n < currentStep ? ' done' : '');
+    wrap.style.flex = n === stepLabels.length ? '0 0 auto' : '1';
+    wrap.innerHTML = '<div class="progress-dot">' + (n < currentStep ? '✓' : n) + '</div><span class="progress-label">' + label + '</span>';
+    progressEl.appendChild(wrap);
+    if(n < stepLabels.length){
+      const line = document.createElement('div');
+      line.className = 'progress-line' + (n < currentStep ? ' done' : '');
+      progressEl.appendChild(line);
+    }
+  });
+}
+
+function goToStep(n){
+  currentStep = n;
+  steps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === n));
+  renderProgress();
+  window.scrollTo({top: document.querySelector('.wizard-card').offsetTop - 20, behavior:'smooth'});
+}
+
+// role picker
+document.querySelectorAll('.role-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    state.role = opt.dataset.role;
+    document.getElementById('role-error').style.display = 'none';
+  });
+});
+
+document.getElementById('to-step-2').addEventListener('click', () => {
+  const required = ['full_name','email','phone','business_name'];
+  let valid = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el.value.trim()){ el.style.borderColor = '#DC2626'; valid = false; }
+    else{ el.style.borderColor = ''; }
+  });
+  if(!state.role){ document.getElementById('role-error').style.display = 'block'; valid = false; }
+  if(!valid) return;
+  required.forEach(id => state[id] = document.getElementById(id).value.trim());
+  goToStep(2);
+});
+
+document.getElementById('to-step-1').addEventListener('click', () => goToStep(1));
+
+document.getElementById('to-step-3').addEventListener('click', () => {
+  const required = ['lead_count','crm_source'];
+  let valid = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el.value.trim()){ el.style.borderColor = '#DC2626'; valid = false; }
+    else{ el.style.borderColor = ''; }
+  });
+  if(!valid) return;
+  state.lead_count = document.getElementById('lead_count').value;
+  state.crm_source = document.getElementById('crm_source').value.trim();
+  state.voice_notes = document.getElementById('voice_notes').value.trim();
+  renderReview();
+  goToStep(3);
+});
+
+document.getElementById('to-step-2-back').addEventListener('click', () => goToStep(2));
+
+function renderReview(){
+  const rows = [
+    ['Name', state.full_name],
+    ['Email', state.email],
+    ['Phone', state.phone],
+    ['Business', state.business_name],
+    ['Role', state.role],
+    ['Database size', state.lead_count],
+    ['Current CRM / source', state.crm_source],
+  ];
+  if(state.voice_notes) rows.push(['Voice notes', state.voice_notes]);
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  rows.forEach(([label, value]) => {
+    const row = document.createElement('div');
+    row.className = 'review-row';
+    row.innerHTML = '<span class="r-label">' + label + '</span><span class="r-value">' + value + '</span>';
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('intake-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const consent = document.getElementById('consent');
+  if(!consent.checked){
+    document.getElementById('consent-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('consent-error').style.display = 'none';
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try{
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({...state, submitted_at: new Date().toISOString()})
+    });
+    if(!res.ok) throw new Error('Bad response');
+    document.getElementById('form-root').style.display = 'none';
+    document.getElementById('success-state').style.display = 'block';
+  }catch(err){
+    document.getElementById('form-root').style.display = 'none';
+    document.getElementById('error-state').style.display = 'block';
+  }
+});
+
+document.getElementById('retry-btn').addEventListener('click', () => {
+  document.getElementById('error-state').style.display = 'none';
+  document.getElementById('form-root').style.display = 'block';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Submit intake';
+});
+
+renderProgress();
+</script>
+</body>
+</html>
