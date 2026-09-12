@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimized Hub — Vendor Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111827;
+    --ink-soft: #1F2937;
+    --pearl: #F8FAFC;
+    --paper: #FFFFFF;
+    --border: #E2E8F0;
+    --muted: #64748B;
+    --cobalt: #2563EB;
+    --cobalt-tint: #EFF6FF;
+    --copper: #C17B3C;
+    --copper-light: #D4933F;
+    --copper-tint: #FBF3EA;
+    --danger: #B91C1C;
+    --ok: #15803D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--pearl);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 20px 80px;
+  }
+  .doc {
+    max-width: 880px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--border);
+  }
+  .num {
+    font-family: 'Roboto Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Letterhead ---- */
+  .letterhead {
+    background: var(--ink);
+    color: white;
+    padding: 36px 44px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .lh-brand { display: flex; align-items: center; gap: 12px; }
+  .lh-logo {
+    width: 40px; height: 40px; border-radius: 10px; background: #0B1220;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .lh-logo svg { width: 22px; height: 22px; }
+  .lh-brand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; }
+  .lh-brand-name span { color: var(--copper-light); }
+  .lh-meta { text-align: right; font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+  .lh-meta b { color: white; font-weight: 600; }
+
+  .headline-block { padding: 44px 44px 8px; }
+  .headline-block h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 3.6vw, 36px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    max-width: 620px;
+  }
+  .headline-block p {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 560px;
+  }
+
+  /* ---- Section framing ---- */
+  .section { padding: 34px 44px; border-top: 1px solid var(--border); }
+  .section-head {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .section-num {
+    font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--copper);
+  }
+  .section-head h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 700;
+  }
+  .section-sub { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 22px; max-width: 640px; }
+
+  /* ---- Rate toggle ---- */
+  .rate-toggle {
+    display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 26px;
+  }
+  .rate-toggle button {
+    padding: 9px 16px; font-size: 13px; font-weight: 600; background: white; color: var(--muted);
+    border: none; cursor: pointer; font-family: inherit; border-right: 1px solid var(--border);
+  }
+  .rate-toggle button:last-child { border-right: none; }
+  .rate-toggle button.active { background: var(--ink); color: white; }
+
+  /* ---- Comparison table ---- */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .cmp-table th, .cmp-table td { padding: 13px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .cmp-table thead th {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 700;
+    border-bottom: 2px solid var(--ink); padding-bottom: 10px;
+  }
+  .cmp-table .row-label { width: 30%; font-weight: 600; color: var(--ink); }
+  .cmp-table .row-label .row-hint { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 3px; line-height: 1.5; }
+  .cmp-table th.col-oh, .cmp-table td.col-oh { background: var(--cobalt-tint); border-left: 2px solid var(--cobalt); border-right: 2px solid var(--cobalt); }
+  .cmp-table thead th.col-oh { border-top: 2px solid var(--cobalt); }
+  .cmp-table tbody tr:last-child td.col-oh { border-bottom: 2px solid var(--cobalt); }
+  .colhead-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); text-transform: none; letter-spacing: 0; display: block; margin-bottom: 2px; }
+  .colhead-name.oh { color: var(--cobalt); }
+
+  .verdict { display: flex; align-items: flex-start; gap: 8px; }
+  .v-yes::before { content: "✓"; color: var(--ok); font-weight: 700; flex-shrink: 0; }
+  .v-no::before { content: "—"; color: var(--muted); flex-shrink: 0; }
+  .v-unk::before { content: "?"; color: var(--copper); font-weight: 700; flex-shrink: 0; }
+  .verdict span { line-height: 1.5; }
+
+  .footnote-mark { font-size: 10px; vertical-align: super; color: var(--copper); font-weight: 700; }
+
+  /* ---- True cost calculator ---- */
+  .calc-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .calc-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: var(--pearl); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .calc-controls-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .seat-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; }
+  .seat-toggle button {
+    padding: 8px 18px; font-size: 13px; font-weight: 700; background: white; color: var(--muted);
+    border: none; cursor: pointer; font-family: 'Roboto Mono', monospace; border-right: 1px solid var(--border);
+  }
+  .seat-toggle button:last-child { border-right: none; }
+  .seat-toggle button.active { background: var(--copper); color: white; }
+
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .calc-col { padding: 22px 24px; }
+  .calc-col + .calc-col { border-left: 1px solid var(--border); }
+  .calc-col.oh { background: var(--cobalt-tint); }
+  .calc-vendor { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 14px; }
+  .calc-vendor.oh { color: var(--cobalt); }
+  .calc-line { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font-size: 13px; color: var(--muted); }
+  .calc-line .num { color: var(--ink); font-weight: 600; }
+  .calc-headline { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; margin-top: 8px; border-top: 1px dashed var(--border); }
+  .calc-headline .label { font-size: 13px; font-weight: 700; }
+  .calc-headline .num { font-size: 24px; font-weight: 800; }
+  .calc-headline .num.oh { color: var(--cobalt); }
+  .calc-headline .num.them { color: var(--ink); }
+  .calc-note { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-top: 10px; }
+
+  /* ---- Reframe strip ---- */
+  .reframe {
+    background: var(--ink); color: white; padding: 30px 44px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+  }
+  .reframe p { font-size: 15.5px; line-height: 1.6; max-width: 640px; }
+  .reframe b { color: var(--copper-light); }
+
+  /* ---- Footer ---- */
+  .doc-footer { padding: 24px 44px 34px; }
+  .doc-footer p { font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+  .doc-footer .sig { margin-top: 18px; font-size: 12.5px; color: var(--ink); }
+  .doc-footer .sig b { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  @media (max-width: 720px) {
+    .letterhead, .headline-block, .section, .reframe, .doc-footer { padding-left: 22px; padding-right: 22px; }
+    .calc-grid { grid-template-columns: 1fr; }
+    .calc-col + .calc-col { border-left: none; border-top: 1px solid var(--border); }
+    .cmp-table { font-size: 12px; }
+    .cmp-table th, .cmp-table td { padding: 10px 8px; }
+    .row-label { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <div class="letterhead">
+    <div class="lh-brand">
+      <div class="lh-logo">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <line x1="176" y1="176" x2="336" y2="176" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="14"/>
+          <line x1="176" y1="176" x2="256" y2="356" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="14"/>
+          <line x1="336" y1="176" x2="256" y2="356" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="14"/>
+          <circle cx="176" cy="176" r="40" fill="#2563EB"/>
+          <circle cx="336" cy="176" r="40" fill="#2563EB"/>
+          <circle cx="256" cy="356" r="40" fill="#C17B3C"/>
+        </svg>
+      </div>
+      <div class="lh-brand-name">Optimized <span>Hub</span></div>
+    </div>
+    <div class="lh-meta">
+      <div><b>Vendor Comparison</b> — Mortgage Automation Stack</div>
+      <div id="lhDate"></div>
+    </div>
+  </div>
+
+  <div class="headline-block">
+    <h1>You're not buying a CRM. You're buying three jobs done at once.</h1>
+    <p>Most platforms in this space sell you one of the three jobs below and call it a full solution. This is a line-by-line look at what's actually included — and what a seat really costs once you do the math.</p>
+  </div>
+
+  <!-- SECTION 1: THE THREE JOBS -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">§1</span>
+      <h2>The Three Jobs</h2>
+    </div>
+    <div class="section-sub">Database reactivation, loan pipeline management, and referral-partner updates are usually three separate purchases. Here's who covers what.</div>
+
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th style="width:30%"></th>
+          <th class="col-oh"><span class="colhead-name oh">Optimized Hub</span>DR + CRM</th>
+          <th><span class="colhead-name">LoanOfficer.ai</span>Full-stack CRM</th>
+          <th><span class="colhead-name">Floify</span>Status portal</th>
+          <th><span class="colhead-name">Typical Mortgage CRM</span>Surefire, Shape, Jungo, etc.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Database Reactivation<span class="row-hint">Automated re-engagement of dormant leads via SMS/email sequencing</span></td>
+          <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
+          <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+          <td><div class="verdict v-no"><span>Not offered</span></div></td>
+          <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+        </tr>
+        <tr>
+          <td class="row-label">Loan Pipeline CRM<span class="row-hint">Full deal tracking, tasks, calendar, team visibility</span></td>
+          <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
+          <td><div class="verdict v-yes"><span>Core product</span></div></td>
+          <td><div class="verdict v-no"><span>Status/portal only, not a pipeline CRM</span></div></td>
+          <td><div class="verdict v-yes"><span>Core product</span></div></td>
+        </tr>
+        <tr>
+          <td class="row-label">Realtor Milestone SMS<span class="row-hint">Automatic status texts to the referral partner on the file</span></td>
+          <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
+          <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+          <td><div class="verdict v-yes"><span>Borrower + partner status updates</span></div></td>
+          <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+        </tr>
+        <tr>
+          <td class="row-label">Onboarding Fee</td>
+          <td class="col-oh"><div class="verdict v-yes"><span>None — 30-day trial on network pricing</span></div></td>
+          <td><div class="verdict v-no"><span>$299 one-time</span></div></td>
+          <td><div class="verdict v-yes"><span>None documented</span></div></td>
+          <td><div class="verdict v-unk"><span>Varies by vendor</span></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 2: TRUE COST -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">§2</span>
+      <h2>True Cost Per Seat</h2>
+    </div>
+    <div class="section-sub">A headline monthly price isn't a per-seat price. LoanOfficer.ai's number moves depending on how many seats you buy — Optimized Hub's doesn't.</div>
+
+    <div class="rate-toggle" id="rateToggle">
+      <button data-rate="297" class="active">Your rate — Onboard 1 Network ($297)</button>
+      <button data-rate="547">General market rate ($547)</button>
+    </div>
+
+    <div class="calc-wrap">
+      <div class="calc-controls">
+        <span class="calc-controls-label">LoanOfficer.ai published tier</span>
+        <div class="seat-toggle" id="seatToggle">
+          <button data-seats="2" data-price="197" class="active">2 seats · $197</button>
+          <button data-seats="5" data-price="397">5 seats · $397</button>
+          <button data-seats="10" data-price="697">10 seats · $697</button>
+        </div>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-col oh">
+          <div class="calc-vendor oh">Optimized Hub — DR + CRM</div>
+          <div class="calc-line"><span>Price per seat</span><span class="num" id="ohPerSeatLine">$297 / seat / mo</span></div>
+          <div class="calc-line"><span>Jobs included</span><span class="num">3 of 3</span></div>
+          <div class="calc-headline">
+            <span class="label">Effective cost / seat</span>
+            <span class="num oh" id="ohEffective">$297</span>
+          </div>
+          <div class="calc-note">Flat per-seat rate — doesn't change with team size.</div>
+        </div>
+        <div class="calc-col">
+          <div class="calc-vendor">LoanOfficer.ai</div>
+          <div class="calc-line"><span>Plan price</span><span class="num" id="loPlanLine">$197 / mo</span></div>
+          <div class="calc-line"><span>Seats on this plan</span><span class="num" id="loSeatsLine">2</span></div>
+          <div class="calc-headline">
+            <span class="label">Effective cost / seat</span>
+            <span class="num them" id="loEffective">$98.50</span>
+          </div>
+          <div class="calc-note">Drops as you add seats — but jobs #1 and #3 above aren't publicly confirmed at any tier.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: REFRAME -->
+  <div class="reframe">
+    <p>Many mortgage platforms are cheaper because they solve <b>one layer</b> — a CRM, a status portal, or a marketing sequence. This is <b>database reactivation, full loan-pipeline CRM, and realtor milestone updates</b> in one workflow, on one line item.</p>
+  </div>
+
+  <div class="doc-footer">
+    <p><span class="footnote-mark">1</span> "Not publicly documented" means the feature isn't confirmed on the vendor's public pricing or marketing materials as of this comparison — not that the vendor lacks it. Get a dated written answer from each vendor before treating this as a final answer on their capabilities.</p>
+    <p style="margin-top:8px">Pricing sourced from each vendor's public pricing pages. Confirm current pricing directly with the vendor before making a purchasing decision — pricing changes without notice.</p>
+    <div class="sig">
+      <b>Optimized Hub Media LLC</b><br>
+      Engineered Logic. Systematic Growth.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('lhDate').textContent = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  let ohRate = 297;
+  let loSeats = 2;
+  let loPrice = 197;
+
+  function fmtMoney(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 });
+  }
+
+  function render() {
+    document.getElementById('ohPerSeatLine').textContent = fmtMoney(ohRate) + ' / seat / mo';
+    document.getElementById('ohEffective').textContent = fmtMoney(ohRate);
+    document.getElementById('loPlanLine').textContent = fmtMoney(loPrice) + ' / mo';
+    document.getElementById('loSeatsLine').textContent = loSeats;
+    document.getElementById('loEffective').textContent = fmtMoney(Math.round((loPrice / loSeats) * 100) / 100);
+  }
+
+  document.getElementById('rateToggle').addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    ohRate = Number(btn.dataset.rate);
+    document.querySelectorAll('#rateToggle button').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  });
+
+  document.getElementById('seatToggle').addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    loSeats = Number(btn.dataset.seats);
+    loPrice = Number(btn.dataset.price);
+    document.querySelectorAll('#seatToggle button').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  });
+
+  render();
+</script>
+
+</body>
+</html>
