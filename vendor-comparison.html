@@ -32,7 +32,7 @@
     padding: 40px 20px 80px;
   }
   .doc {
-    max-width: 880px;
+    max-width: 960px;
     margin: 0 auto;
     background: var(--paper);
     border: 1px solid var(--border);
@@ -71,14 +71,14 @@
     font-size: clamp(26px, 3.6vw, 36px);
     line-height: 1.18;
     letter-spacing: -0.01em;
-    max-width: 620px;
+    max-width: 660px;
   }
   .headline-block p {
     margin-top: 16px;
     font-size: 15px;
     color: var(--muted);
     line-height: 1.65;
-    max-width: 560px;
+    max-width: 600px;
   }
 
   /* ---- Section framing ---- */
@@ -92,7 +92,7 @@
   .section-head h2 {
     font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 700;
   }
-  .section-sub { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 22px; max-width: 640px; }
+  .section-sub { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 22px; max-width: 680px; }
 
   /* ---- Rate toggle ---- */
   .rate-toggle {
@@ -106,19 +106,22 @@
   .rate-toggle button.active { background: var(--ink); color: white; }
 
   /* ---- Comparison table ---- */
-  .cmp-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  .cmp-table th, .cmp-table td { padding: 13px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .table-scroll { overflow-x: auto; }
+  .cmp-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 13px; }
+  .cmp-table th, .cmp-table td { padding: 12px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
   .cmp-table thead th {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 700;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 700;
     border-bottom: 2px solid var(--ink); padding-bottom: 10px;
   }
-  .cmp-table .row-label { width: 30%; font-weight: 600; color: var(--ink); }
-  .cmp-table .row-label .row-hint { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 3px; line-height: 1.5; }
+  .cmp-table .row-label { width: 22%; font-weight: 600; color: var(--ink); }
+  .cmp-table .row-label .row-hint { display: block; font-weight: 400; color: var(--muted); font-size: 11.5px; margin-top: 3px; line-height: 1.5; }
   .cmp-table th.col-oh, .cmp-table td.col-oh { background: var(--cobalt-tint); border-left: 2px solid var(--cobalt); border-right: 2px solid var(--cobalt); }
   .cmp-table thead th.col-oh { border-top: 2px solid var(--cobalt); }
   .cmp-table tbody tr:last-child td.col-oh { border-bottom: 2px solid var(--cobalt); }
-  .colhead-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); text-transform: none; letter-spacing: 0; display: block; margin-bottom: 2px; }
+  .colhead-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13.5px; color: var(--ink); text-transform: none; letter-spacing: 0; display: block; margin-bottom: 2px; }
   .colhead-name.oh { color: var(--cobalt); }
+  .row-price td { font-family: 'Roboto Mono', monospace; font-weight: 600; }
+  .row-price .col-oh { font-weight: 700; }
 
   .verdict { display: flex; align-items: flex-start; gap: 8px; }
   .v-yes::before { content: "✓"; color: var(--ok); font-weight: 700; flex-shrink: 0; }
@@ -129,7 +132,7 @@
   .footnote-mark { font-size: 10px; vertical-align: super; color: var(--copper); font-weight: 700; }
 
   /* ---- True cost calculator ---- */
-  .calc-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .calc-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 34px; }
   .calc-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: var(--pearl); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
   .calc-controls-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
   .seat-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; }
@@ -155,11 +158,51 @@
   .calc-headline .num.them { color: var(--ink); }
   .calc-note { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-top: 10px; }
 
+  /* ---- Buy-it-separately stack ---- */
+  .stack-wrap {
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .stack-header {
+    padding: 16px 20px; background: var(--pearl); border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .stack-body { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0; }
+  .stack-side { padding: 26px 28px; }
+  .stack-side.them { }
+  .stack-side.oh { background: var(--cobalt-tint); }
+  .stack-vs {
+    display: flex; align-items: center; justify-content: center; padding: 0 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 13px; color: var(--muted);
+    background: var(--paper); align-self: stretch;
+    border-left: 1px dashed var(--border); border-right: 1px dashed var(--border);
+  }
+  .stack-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14.5px; margin-bottom: 16px; }
+  .stack-title.oh { color: var(--cobalt); }
+  .stack-item { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; font-size: 13.5px; }
+  .stack-item .who { color: var(--ink-soft); }
+  .stack-item .who .jobtag { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .stack-item .amt { color: var(--ink); font-weight: 600; }
+  .stack-total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 14px; margin-top: 10px; border-top: 1px dashed var(--border);
+  }
+  .stack-total .label { font-size: 13.5px; font-weight: 700; }
+  .stack-total .num { font-size: 28px; font-weight: 800; }
+  .stack-total .num.them { color: var(--ink); }
+  .stack-total .num.oh { color: var(--cobalt); }
+  .stack-logins { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+  .savings-banner {
+    background: var(--ink); color: white; padding: 18px 28px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .savings-banner .txt { font-size: 14px; line-height: 1.5; max-width: 460px; }
+  .savings-banner .txt b { color: var(--copper-light); }
+  .savings-banner .amt { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; color: var(--copper-light); white-space: nowrap; }
+
   /* ---- Reframe strip ---- */
   .reframe {
     background: var(--ink); color: white; padding: 30px 44px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
   }
-  .reframe p { font-size: 15.5px; line-height: 1.6; max-width: 640px; }
+  .reframe p { font-size: 15.5px; line-height: 1.6; max-width: 680px; }
   .reframe b { color: var(--copper-light); }
 
   /* ---- Footer ---- */
@@ -172,9 +215,9 @@
     .letterhead, .headline-block, .section, .reframe, .doc-footer { padding-left: 22px; padding-right: 22px; }
     .calc-grid { grid-template-columns: 1fr; }
     .calc-col + .calc-col { border-left: none; border-top: 1px solid var(--border); }
-    .cmp-table { font-size: 12px; }
-    .cmp-table th, .cmp-table td { padding: 10px 8px; }
-    .row-label { width: auto; }
+    .stack-body { grid-template-columns: 1fr; }
+    .stack-vs { border-left: none; border-right: none; border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border); padding: 8px; }
+    .savings-banner { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -204,7 +247,7 @@
 
   <div class="headline-block">
     <h1>You're not buying a CRM. You're buying three jobs done at once.</h1>
-    <p>Most platforms in this space sell you one of the three jobs below and call it a full solution. This is a line-by-line look at what's actually included — and what a seat really costs once you do the math.</p>
+    <p>Most platforms in this space sell you one or two of the three jobs below and call it a full solution. This is a line-by-line look at what's actually included, what it actually costs per seat — and what you'd pay if you stitched the same three jobs together from separate vendors instead.</p>
   </div>
 
   <!-- SECTION 1: THE THREE JOBS -->
@@ -213,23 +256,34 @@
       <span class="section-num">§1</span>
       <h2>The Three Jobs</h2>
     </div>
-    <div class="section-sub">Database reactivation, loan pipeline management, and referral-partner updates are usually three separate purchases. Here's who covers what.</div>
+    <div class="section-sub">Database reactivation, loan pipeline management, and referral-partner updates are usually three separate purchases. Here's who covers what — and what each one publicly charges.</div>
 
+    <div class="table-scroll">
     <table class="cmp-table">
       <thead>
         <tr>
-          <th style="width:30%"></th>
+          <th style="width:22%"></th>
           <th class="col-oh"><span class="colhead-name oh">Optimized Hub</span>DR + CRM</th>
           <th><span class="colhead-name">LoanOfficer.ai</span>Full-stack CRM</th>
+          <th><span class="colhead-name">Hova Digital</span>Marketing + CRM</th>
           <th><span class="colhead-name">Floify</span>Status portal</th>
           <th><span class="colhead-name">Typical Mortgage CRM</span>Surefire, Shape, Jungo, etc.</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="row-price">
+          <td class="row-label">Published Price<span class="row-hint">Monthly, per seat unless noted</span></td>
+          <td class="col-oh">$297–$479</td>
+          <td>$98.50–$197<span class="footnote-mark">2</span></td>
+          <td>$497</td>
+          <td>$79<span class="footnote-mark">3</span></td>
+          <td>Varies, typically $100–$300+</td>
+        </tr>
         <tr>
           <td class="row-label">Database Reactivation<span class="row-hint">Automated re-engagement of dormant leads via SMS/email sequencing</span></td>
           <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
           <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+          <td><div class="verdict v-yes"><span>Core product</span></div></td>
           <td><div class="verdict v-no"><span>Not offered</span></div></td>
           <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
         </tr>
@@ -237,6 +291,7 @@
           <td class="row-label">Loan Pipeline CRM<span class="row-hint">Full deal tracking, tasks, calendar, team visibility</span></td>
           <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
           <td><div class="verdict v-yes"><span>Core product</span></div></td>
+          <td><div class="verdict v-yes"><span>Bundled CRM (built on Go High Level)</span></div></td>
           <td><div class="verdict v-no"><span>Status/portal only, not a pipeline CRM</span></div></td>
           <td><div class="verdict v-yes"><span>Core product</span></div></td>
         </tr>
@@ -244,6 +299,7 @@
           <td class="row-label">Realtor Milestone SMS<span class="row-hint">Automatic status texts to the referral partner on the file</span></td>
           <td class="col-oh"><div class="verdict v-yes"><span>Core product</span></div></td>
           <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
+          <td><div class="verdict v-unk"><span>Co-branded partner materials offered; automatic milestone SMS not publicly documented<span class="footnote-mark">1</span></span></div></td>
           <td><div class="verdict v-yes"><span>Borrower + partner status updates</span></div></td>
           <td><div class="verdict v-unk"><span>Not publicly documented<span class="footnote-mark">1</span></span></div></td>
         </tr>
@@ -251,11 +307,13 @@
           <td class="row-label">Onboarding Fee</td>
           <td class="col-oh"><div class="verdict v-yes"><span>None — 30-day trial on network pricing</span></div></td>
           <td><div class="verdict v-no"><span>$299 one-time</span></div></td>
+          <td><div class="verdict v-yes"><span>None — "Zero Setup" per vendor</span></div></td>
           <td><div class="verdict v-yes"><span>None documented</span></div></td>
           <td><div class="verdict v-unk"><span>Varies by vendor</span></div></td>
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- SECTION 2: TRUE COST -->
@@ -268,7 +326,7 @@
 
     <div class="rate-toggle" id="rateToggle">
       <button data-rate="297" class="active">Your rate — Onboard 1 Network ($297)</button>
-      <button data-rate="547">General market rate ($547)</button>
+      <button data-rate="479">General market rate ($479)</button>
     </div>
 
     <div class="calc-wrap">
@@ -303,16 +361,50 @@
         </div>
       </div>
     </div>
+
+    <div class="stack-wrap">
+      <div class="stack-header">If you bought these three jobs separately</div>
+      <div class="stack-body">
+        <div class="stack-side them">
+          <div class="stack-title">The DIY stack</div>
+          <div class="stack-item"><span class="who">Hova Digital<span class="jobtag">Database reactivation + CRM</span></span><span class="amt">$497</span></div>
+          <div class="stack-item"><span class="who">Floify<span class="jobtag">Realtor / borrower status portal</span></span><span class="amt">$79</span></div>
+          <div class="stack-total">
+            <span class="label">Total / seat / mo</span>
+            <span class="num them">$576</span>
+          </div>
+          <div class="stack-logins">Two logins, two vendor relationships, two support lines.</div>
+        </div>
+        <div class="stack-vs">VS</div>
+        <div class="stack-side oh">
+          <div class="stack-title oh">Optimized Hub</div>
+          <div class="stack-item"><span class="who">Database reactivation<span class="jobtag">Included</span></span><span class="amt">—</span></div>
+          <div class="stack-item"><span class="who">Full pipeline CRM<span class="jobtag">Included</span></span><span class="amt">—</span></div>
+          <div class="stack-item"><span class="who">Realtor milestone SMS<span class="jobtag">Included</span></span><span class="amt">—</span></div>
+          <div class="stack-total">
+            <span class="label">Total / seat / mo</span>
+            <span class="num oh" id="stackOhTotal">$297</span>
+          </div>
+          <div class="stack-logins">One login. One vendor. One line item.</div>
+        </div>
+      </div>
+      <div class="savings-banner">
+        <div class="txt">At your <b>Onboard 1 Network rate</b>, that's what you'd save every month by not stitching two vendors together.</div>
+        <div class="amt" id="stackSavings">$279/mo saved</div>
+      </div>
+    </div>
   </div>
 
   <!-- SECTION 3: REFRAME -->
   <div class="reframe">
-    <p>Many mortgage platforms are cheaper because they solve <b>one layer</b> — a CRM, a status portal, or a marketing sequence. This is <b>database reactivation, full loan-pipeline CRM, and realtor milestone updates</b> in one workflow, on one line item.</p>
+    <p>Buy database reactivation and a CRM from Hova, then add Floify for realtor and borrower status updates, and you're paying <b>more — for two logins instead of one</b>. This is database reactivation, full loan-pipeline CRM, and realtor milestone updates in one workflow, on one line item.</p>
   </div>
 
   <div class="doc-footer">
     <p><span class="footnote-mark">1</span> "Not publicly documented" means the feature isn't confirmed on the vendor's public pricing or marketing materials as of this comparison — not that the vendor lacks it. Get a dated written answer from each vendor before treating this as a final answer on their capabilities.</p>
-    <p style="margin-top:8px">Pricing sourced from each vendor's public pricing pages. Confirm current pricing directly with the vendor before making a purchasing decision — pricing changes without notice.</p>
+    <p style="margin-top:6px"><span class="footnote-mark">2</span> LoanOfficer.ai's effective per-seat cost is calculated from its published bundle pricing ($197 for 2 seats, $397 for 5, $697 for 10) and drops as seat count rises — see the calculator above for the full range.</p>
+    <p style="margin-top:6px"><span class="footnote-mark">3</span> Floify does not publish pricing on its own site; $79/seat/mo is the figure most consistently reported across third-party review platforms (Capterra, SourceForge) as of this comparison. Confirm directly with Floify before citing a specific number to a prospect.</p>
+    <p style="margin-top:8px">Pricing sourced from each vendor's public pricing pages and, where noted, third-party review platforms. Confirm current pricing directly with the vendor before making a purchasing decision — pricing changes without notice.</p>
     <div class="sig">
       <b>Optimized Hub Media LLC</b><br>
       Engineered Logic. Systematic Growth.
@@ -324,6 +416,7 @@
 <script>
   document.getElementById('lhDate').textContent = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
+  const STACK_THEM_TOTAL = 576; // Hova $497 + Floify $79
   let ohRate = 297;
   let loSeats = 2;
   let loPrice = 197;
@@ -338,6 +431,13 @@
     document.getElementById('loPlanLine').textContent = fmtMoney(loPrice) + ' / mo';
     document.getElementById('loSeatsLine').textContent = loSeats;
     document.getElementById('loEffective').textContent = fmtMoney(Math.round((loPrice / loSeats) * 100) / 100);
+
+    document.getElementById('stackOhTotal').textContent = fmtMoney(ohRate);
+    const savings = STACK_THEM_TOTAL - ohRate;
+    document.getElementById('stackSavings').textContent = fmtMoney(savings) + '/mo saved';
+    const rateLabel = ohRate === 297 ? 'Onboard 1 Network rate' : 'general market rate';
+    document.querySelector('.savings-banner .txt').innerHTML =
+      'At your <b>' + rateLabel + '</b>, that\'s what you\'d save every month by not stitching two vendors together.';
   }
 
   document.getElementById('rateToggle').addEventListener('click', (e) => {
