@@ -86,6 +86,7 @@
   .field input[type=text],
   .field input[type=email],
   .field input[type=tel],
+  .field input[type=url],
   .field select,
   .field textarea{
     width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);
@@ -98,12 +99,20 @@
   .field textarea{resize:vertical;min-height:88px;}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 
+  .color-input-wrap{display:flex;align-items:center;gap:10px;}
+  .color-input-wrap input[type=color]{width:44px;height:44px;border-radius:8px;border:1.5px solid var(--line);padding:2px;cursor:pointer;flex-shrink:0;}
+  .color-input-wrap input[type=text]{flex:1;}
+
   .role-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .role-option{
     border:1.5px solid var(--line);border-radius:8px;padding:12px 8px;text-align:center;
     cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .15s ease;
   }
   .role-option.selected{border-color:var(--cobalt);color:var(--cobalt);background:#EFF4FF;}
+
+  .subsection{border-top:1px solid var(--line);margin:26px 0 22px;padding-top:22px;}
+  .subsection-title{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 4px;}
+  .subsection-sub{font-size:12.5px;color:var(--muted);margin:0 0 18px;line-height:1.6;}
 
   .btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:32px;}
   .btn{
@@ -174,7 +183,7 @@
   <div class="hero-inner">
     <p class="eyebrow">Client Intake</p>
     <h1 id="hero-title">Let's get your build started.</h1>
-    <p class="hero-sub">Three short steps — about five minutes. Everything here goes straight to our build queue, so the faster you fill it out, the faster your Database Reactivation system goes live.</p>
+    <p class="hero-sub">Four short steps — about six minutes. Everything here goes straight to our build queue, so the faster you fill it out, the faster your Database Reactivation system goes live.</p>
   </div>
 </section>
 
@@ -228,8 +237,56 @@
           </div>
         </div>
 
-        <!-- STEP 2 -->
+        <!-- STEP 2: COMPLIANCE & BRANDING -->
         <div class="step" data-step="2">
+          <h2>Compliance &amp; branding</h2>
+          <p class="step-sub">Your NMLS number is required on all borrower-facing communication under the SAFE Act — this is what goes on it.</p>
+
+          <div class="field">
+            <label for="nmls_number">Your individual NMLS #</label>
+            <input type="text" id="nmls_number" required placeholder="e.g. 1234567">
+          </div>
+
+          <div id="broker-branding-fields" style="display:none;">
+            <div class="subsection">
+              <p class="subsection-title">Brokerage branding</p>
+              <p class="subsection-sub">You picked Broker or Owner, so this is what brands your CRM, borrower portal, and reactivation messages. All optional — leave blank and we'll follow up on our first call.</p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="company_nmls">Brokerage NMLS # <span style="font-weight:400;color:var(--muted);">(if different from yours)</span></label>
+                <input type="text" id="company_nmls" placeholder="e.g. 7654321">
+              </div>
+              <div class="field">
+                <label for="brand_color">Brand color</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="brand_color_picker" value="#2563EB">
+                  <input type="text" id="brand_color" placeholder="#2563EB">
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="logo_url">Link to your logo <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+              <input type="url" id="logo_url" placeholder="https://yoursite.com/logo.png">
+              <div class="hint">A link from your website, Google Drive, or Canva works fine — we'll handle hosting it properly.</div>
+            </div>
+
+            <div class="field">
+              <label for="office_address">Office address <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+              <input type="text" id="office_address" placeholder="123 Main St, Tampa, FL 33624">
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="to-step-1">Back</button>
+            <button type="button" class="btn btn-primary" id="to-step-3">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
           <h2>Your database and your voice</h2>
           <p class="step-sub">This is what actually shapes your reactivation sequence — the more specific, the better it sounds like you, not a script.</p>
 
@@ -258,13 +315,13 @@
           </div>
 
           <div class="btn-row">
-            <button type="button" class="btn btn-ghost" id="to-step-1">Back</button>
-            <button type="button" class="btn btn-primary" id="to-step-3">Continue</button>
+            <button type="button" class="btn btn-ghost" id="to-step-2-back">Back</button>
+            <button type="button" class="btn btn-primary" id="to-step-4">Continue</button>
           </div>
         </div>
 
-        <!-- STEP 3 -->
-        <div class="step" data-step="3">
+        <!-- STEP 4 -->
+        <div class="step" data-step="4">
           <h2>Confirm and submit</h2>
           <p class="step-sub">Take a second look — then you're in the queue.</p>
 
@@ -277,7 +334,7 @@
           <div class="error-text" id="consent-error">We need this checked before we can start outreach on your behalf.</div>
 
           <div class="btn-row">
-            <button type="button" class="btn btn-ghost" id="to-step-2-back">Back</button>
+            <button type="button" class="btn btn-ghost" id="to-step-3-back">Back</button>
             <button type="submit" class="btn btn-primary" id="submit-btn">Submit intake</button>
           </div>
         </div>
@@ -312,6 +369,7 @@ const WEBHOOK_URL = 'https://primary-production-c3ad.up.railway.app/webhook/clie
 // ===== STATE =====
 const state = {
   full_name: '', email: '', phone: '', business_name: '', role: '',
+  nmls_number: '', company_nmls: '', logo_url: '', brand_color: '', office_address: '',
   lead_count: '', crm_source: '', voice_notes: ''
 };
 let currentStep = 1;
@@ -323,7 +381,7 @@ if(qp.get('email')) document.getElementById('email').value = decodeURIComponent(
 
 const steps = document.querySelectorAll('.step');
 const progressEl = document.getElementById('progress');
-const stepLabels = ['About you', 'Database & voice', 'Confirm'];
+const stepLabels = ['About you', 'Compliance', 'Database & voice', 'Confirm'];
 
 function renderProgress(){
   progressEl.innerHTML = '';
@@ -359,6 +417,16 @@ document.querySelectorAll('.role-option').forEach(opt => {
   });
 });
 
+// keep brand_color text + color picker in sync
+document.getElementById('brand_color_picker').addEventListener('input', (e) => {
+  document.getElementById('brand_color').value = e.target.value;
+});
+document.getElementById('brand_color').addEventListener('input', (e) => {
+  if(/^#[0-9A-Fa-f]{6}$/.test(e.target.value)){
+    document.getElementById('brand_color_picker').value = e.target.value;
+  }
+});
+
 document.getElementById('to-step-2').addEventListener('click', () => {
   const required = ['full_name','email','phone','business_name'];
   let valid = true;
@@ -370,12 +438,29 @@ document.getElementById('to-step-2').addEventListener('click', () => {
   if(!state.role){ document.getElementById('role-error').style.display = 'block'; valid = false; }
   if(!valid) return;
   required.forEach(id => state[id] = document.getElementById(id).value.trim());
+  // show brokerage branding fields only for Broker/Owner
+  document.getElementById('broker-branding-fields').style.display =
+    (state.role === 'Broker' || state.role === 'Owner') ? 'block' : 'none';
   goToStep(2);
 });
 
 document.getElementById('to-step-1').addEventListener('click', () => goToStep(1));
 
 document.getElementById('to-step-3').addEventListener('click', () => {
+  const nmls = document.getElementById('nmls_number');
+  if(!nmls.value.trim()){ nmls.style.borderColor = '#DC2626'; return; }
+  nmls.style.borderColor = '';
+  state.nmls_number = nmls.value.trim();
+  state.company_nmls = document.getElementById('company_nmls').value.trim();
+  state.logo_url = document.getElementById('logo_url').value.trim();
+  state.brand_color = document.getElementById('brand_color').value.trim();
+  state.office_address = document.getElementById('office_address').value.trim();
+  goToStep(3);
+});
+
+document.getElementById('to-step-2-back').addEventListener('click', () => goToStep(2));
+
+document.getElementById('to-step-4').addEventListener('click', () => {
   const required = ['lead_count','crm_source'];
   let valid = true;
   required.forEach(id => {
@@ -388,10 +473,10 @@ document.getElementById('to-step-3').addEventListener('click', () => {
   state.crm_source = document.getElementById('crm_source').value.trim();
   state.voice_notes = document.getElementById('voice_notes').value.trim();
   renderReview();
-  goToStep(3);
+  goToStep(4);
 });
 
-document.getElementById('to-step-2-back').addEventListener('click', () => goToStep(2));
+document.getElementById('to-step-3-back').addEventListener('click', () => goToStep(3));
 
 function renderReview(){
   const rows = [
@@ -400,9 +485,14 @@ function renderReview(){
     ['Phone', state.phone],
     ['Business', state.business_name],
     ['Role', state.role],
-    ['Database size', state.lead_count],
-    ['Current CRM / source', state.crm_source],
+    ['NMLS #', state.nmls_number],
   ];
+  if(state.company_nmls) rows.push(['Brokerage NMLS #', state.company_nmls]);
+  if(state.brand_color) rows.push(['Brand color', state.brand_color]);
+  if(state.logo_url) rows.push(['Logo link', state.logo_url]);
+  if(state.office_address) rows.push(['Office address', state.office_address]);
+  rows.push(['Database size', state.lead_count]);
+  rows.push(['Current CRM / source', state.crm_source]);
   if(state.voice_notes) rows.push(['Voice notes', state.voice_notes]);
   const list = document.getElementById('review-list');
   list.innerHTML = '';
