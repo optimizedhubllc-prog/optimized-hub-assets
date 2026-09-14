@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Optimized Hub</title>
+<link rel="icon" type="image/png" href="https://optimizedhubllc-prog.github.io/optimized-hub-assets/OH_Logo_Dark%20%282%29.png">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="ledger-manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ledger">
+<link rel="apple-touch-icon" href="https://optimizedhubllc-prog.github.io/optimized-hub-assets/OH_Logo_Dark%20%282%29.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root {
+    --ink: #111827; --pearl: #F8FAFC; --line: #E2E8F0; --muted: #64748B;
+    --cobalt: #2563EB; --copper: #C17B3C; --copper-light: #D4933F;
+    --success: #16A34A; --danger: #DC2626; --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--pearl); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .app { max-width: 760px; margin: 0 auto; min-height: 100vh; background: var(--white); }
+
+  .auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--ink); }
+  .auth-card { background: white; border-radius: 16px; padding: 32px 24px; width: 100%; max-width: 360px; }
+  .auth-logo { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 4px; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .auth-logo span { color: var(--copper); }
+  .auth-sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+  .auth-field { margin-bottom: 14px; }
+  .auth-field label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .auth-field input { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px; }
+  .auth-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--cobalt); color: white; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+  .auth-error { background: #FEF2F2; color: var(--danger); font-size: 13px; padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; display: none; }
+  .auth-error.show { display: block; }
+
+  header { background: var(--ink); padding: 18px 20px; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { color: white; font-size: 17px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+  header h1 span { color: var(--copper-light); }
+  .logout-btn { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.75); border: none; border-radius: 8px; padding: 7px 10px; font-size: 11px; cursor: pointer; }
+
+  .month-row { display: flex; gap: 8px; padding: 14px 20px 0; align-items: center; }
+  .month-row select { flex: 1; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); font-size: 13px; font-weight: 600; background: white; }
+  .add-btn { background: var(--cobalt); color: white; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+
+  .strip { margin: 16px 20px 0; background: white; border: 1px solid var(--line); border-radius: 14px; display: flex; flex-wrap: wrap; }
+  .stat { flex: 1; min-width: 150px; padding: 14px 18px; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: none; }
+  .stat-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; }
+  .stat-value { font-size: 21px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  .section { margin: 16px 20px; }
+  .section-card { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 10px; }
+
+  .review-banner { margin: 16px 20px 0; background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 12px 14px; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+
+  .review-item { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; background: var(--pearl); }
+  .review-top { display: flex; justify-content: space-between; gap: 10px; }
+  .review-desc { font-size: 13.5px; font-weight: 700; }
+  .review-meta { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .review-amount { font-size: 14px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap; }
+  .review-actions { display: flex; gap: 6px; }
+  .review-actions button { flex: 1; font-size: 11.5px; font-weight: 700; padding: 7px; border-radius: 7px; border: 1px solid var(--line); background: white; cursor: pointer; }
+  .review-actions button.approve { border-color: var(--success); color: var(--success); }
+  .review-actions button.dismiss { color: var(--muted); }
+
+  .filters { display: flex; gap: 6px; padding: 0 20px; margin-top: 16px; }
+  .pill { border: 1.5px solid var(--line); background: white; color: var(--muted); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+  .pill.active { background: var(--ink); border-color: var(--ink); color: white; }
+
+  .export-btn { margin-left: auto; border: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; background: white; cursor: pointer; }
+
+  .list-wrap { margin: 10px 20px 24px; background: white; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: none; }
+  .row-date { width: 64px; flex-shrink: 0; font-size: 11.5px; color: var(--muted); }
+  .row-info { flex: 1; min-width: 0; }
+  .row-desc { font-size: 14px; font-weight: 700; }
+  .row-meta { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .row-amount { font-size: 14px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap; }
+  .row-actions { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; }
+  .row:hover .row-actions { opacity: 1; }
+  .row-actions button { background: none; border: none; color: var(--muted); padding: 4px; cursor: pointer; font-size: 13px; }
+  .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(17,24,39,.5); z-index: 50; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; width: 100%; max-width: 480px; border-radius: 16px 16px 0 0; max-height: 90vh; overflow-y: auto; }
+  @media (min-width: 640px) { .modal-overlay { align-items: center; } .modal { border-radius: 16px; margin: 20px; } }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .modal-header h2 { font-size: 16px; font-weight: 700; }
+  .modal-close { background: var(--pearl); border: none; width: 28px; height: 28px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+  .modal-body { padding: 18px; }
+  .type-toggle { display: flex; gap: 8px; margin-bottom: 16px; }
+  .type-toggle button { flex: 1; padding: 9px; border-radius: 8px; border: 1.5px solid var(--line); background: white; color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; }
+  .type-toggle button.active-income { background: var(--cobalt); border-color: var(--cobalt); color: white; }
+  .type-toggle button.active-expense { background: var(--copper); border-color: var(--copper); color: white; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 14.5px; font-family: inherit; }
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .checkbox-row label { font-size: 13px; font-weight: 600; }
+  .modal-footer { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); }
+  .btn-primary { flex: 1; background: var(--ink); color: white; border: none; padding: 12px; border-radius: 10px; font-size: 14.5px; font-weight: 700; cursor: pointer; }
+  .btn-danger { border: 1.5px solid #FCA5A5; color: var(--danger); background: white; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .save-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: white; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .save-toast.show { opacity: 1; }
+
+  .fab { position: fixed; bottom: 24px; right: 50%; transform: translateX(390px); width: 52px; height: 52px; border-radius: 50%; background: var(--cobalt); color: white; border: none; font-size: 26px; cursor: pointer; box-shadow: 0 6px 18px rgba(37,99,235,.4); display: none; }
+  @media (max-width: 760px) { .fab { right: 20px; transform: none; } }
+</style>
+</head>
+<body>
+
+<div id="authScreen" class="auth-screen">
+  <div class="auth-card">
+    <div style="width:60px;height:60px;border-radius:14px;overflow:hidden;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:#0B1220;">
+      <img src="https://optimizedhubllc-prog.github.io/optimized-hub-assets/OH_Logo_Dark%20%282%29.png" alt="Optimized Hub" style="width:150%;height:150%;object-fit:cover;">
+    </div>
+    <div class="auth-logo">Ledger <span>·</span> Optimized Hub</div>
+    <div class="auth-sub">Sign in with your Hub CRM account</div>
+    <div class="auth-error" id="authError"></div>
+    <div class="auth-field"><label>Email</label><input id="authEmail" type="email" autocomplete="email"></div>
+    <div class="auth-field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password"></div>
+    <button class="auth-btn" id="authBtn" onclick="submitAuth()">Sign in</button>
+  </div>
+</div>
+
+<div class="app" id="mainApp" style="display:none">
+  <header>
+    <h1>Ledger <span>·</span> OH</h1>
+    <button class="logout-btn" onclick="signOut()">Log out</button>
+  </header>
+
+  <div class="month-row">
+    <select id="monthFilter" onchange="onMonthChange()"></select>
+    <button class="add-btn" onclick="openAdd()">+ Add</button>
+  </div>
+
+  <div class="strip">
+    <div class="stat"><div class="stat-label">Income</div><div class="stat-value" id="statIncome" style="color:var(--cobalt)">$0</div></div>
+    <div class="stat"><div class="stat-label">Expenses</div><div class="stat-value" id="statExpense" style="color:var(--copper)">$0</div></div>
+    <div class="stat"><div class="stat-label">Net</div><div class="stat-value" id="statNet">$0</div></div>
+  </div>
+
+  <div class="review-banner" id="reviewBanner" style="display:none" onclick="toggleReviewSection()">
+    <span id="reviewBannerText"></span>
+    <span>Review →</span>
+  </div>
+  <div class="section" id="reviewSection" style="display:none">
+    <div class="section-card">
+      <div class="section-title">Needs review — found in weekly email scan</div>
+      <div id="reviewList"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-card">
+      <div class="section-title">Spending by category</div>
+      <canvas id="categoryChart" height="160"></canvas>
+      <div class="empty" id="categoryEmpty" style="display:none;padding:16px 0 0">No expenses in this range yet.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-card">
+      <div class="section-title">Monthly trend</div>
+      <canvas id="trendChart" height="160"></canvas>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="pill active" id="pillAll" onclick="setTypeFilter('all')">All</button>
+    <button class="pill" id="pillIncome" onclick="setTypeFilter('income')">Income</button>
+    <button class="pill" id="pillExpense" onclick="setTypeFilter('expense')">Expenses</button>
+    <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+  </div>
+
+  <div class="list-wrap" id="listWrap"></div>
+</div>
+
+<button class="fab" id="fab" onclick="openAdd()">+</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">New entry</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="type-toggle">
+        <button id="typeBtnIncome" onclick="setFormType('income')">Income</button>
+        <button id="typeBtnExpense" onclick="setFormType('expense')">Expense</button>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Date</label><input type="date" id="f_date"></div>
+        <div class="field"><label>Amount ($)</label><input type="number" step="0.01" id="f_amount" placeholder="0.00"></div>
+      </div>
+      <div class="field"><label>Category</label><select id="f_category"></select></div>
+      <div class="field"><label>Description</label><input type="text" id="f_description" placeholder="e.g. Onboard 1 Mortgage — DR setup"></div>
+      <div class="field"><label>Client / project (optional)</label><input type="text" id="f_client_ref" placeholder="e.g. Onboard 1 Mortgage, Mary"></div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="f_recurring">
+        <label for="f_recurring">Recurring monthly expense</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-danger" id="deleteBtn" style="display:none" onclick="deleteEntry()">Delete</button>
+      <button class="btn-primary" onclick="saveEntry()">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<div class="save-toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://yutslculmlgugedfvzzq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1dHNsY3VsbWxndWdlZGZ2enpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1NzY0MjcsImV4cCI6MjEwMzE1MjQyN30.dmX-Wim2qg2ELsYWKMwo6bh6E7XpXB6cK7M3mwZ248w';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const INK = '#111827', MUTED = '#64748B', COBALT = '#2563EB', COPPER = '#C17B3C', LINE = '#E2E8F0', SUCCESS = '#16A34A', DANGER = '#DC2626';
+
+const INCOME_CATEGORIES = ['DR Setup Fee', 'CRM Setup Fee', 'Monthly Subscription', 'Audit Fee', 'Other Income'];
+const EXPENSE_CATEGORIES = ['Software & Subscriptions', 'Hosting & Infrastructure', 'Contractors & Labor', 'Marketing & Ads', 'SMS / Communications', 'Domains & Assets', 'Legal & Compliance', 'Other Expense'];
+const CATEGORY_COLORS = ['#2563EB', '#C17B3C', '#16A34A', '#D4933F', '#64748B', '#DC2626', '#7C3AED', '#0891B2'];
+
+let entries = [];
+let currentUserId = null;
+let monthFilter = 'all';
+let typeFilter = 'all';
+let editingId = null;
+let formType = 'income';
+let reviewOpen = false;
+let categoryChart = null, trendChart = null;
+
+window.submitAuth = submitAuth;
+window.signOut = signOut;
+window.openAdd = openAdd;
+window.closeModal = closeModal;
+window.saveEntry = saveEntry;
+window.deleteEntry = deleteEntry;
+window.setFormType = setFormType;
+window.onMonthChange = onMonthChange;
+window.setTypeFilter = setTypeFilter;
+window.exportCSV = exportCSV;
+window.toggleReviewSection = toggleReviewSection;
+window.approveReview = approveReview;
+window.dismissReview = dismissReview;
+window.openRow = openRow;
+
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function monthKey(d) { return d.slice(0, 7); }
+function fmtMoney(n) { return (Number(n) || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }); }
+function fmtMonthLabel(ym) { const [y, m] = ym.split('-'); return new Date(Number(y), Number(m) - 1, 1).toLocaleDateString('en-US', { month: 'short', year: '2-digit' }); }
+function fmtDateShort(d) { return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function escapeHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+async function submitAuth() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  document.getElementById('authError').classList.remove('show');
+  if (!email || !password) { showAuthError('Enter email and password.'); return; }
+  const btn = document.getElementById('authBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  } catch (e) {
+    showAuthError(e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign in';
+  }
+}
+async function signOut() { await supabase.auth.signOut(); }
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session) showApp(); else showAuth();
+});
+
+function showAuth() {
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('fab').style.display = 'none';
+}
+
+async function showApp() {
+  const { data: { user } } = await supabase.auth.getUser();
+  currentUserId = user.id;
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('fab').style.display = 'block';
+  await loadEntries();
+  setupRealtime();
+}
+
+let realtimeChannel = null;
+function setupRealtime() {
+  if (realtimeChannel) return;
+  realtimeChannel = supabase.channel('ledger-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'ledger_entries' }, () => loadEntries())
+    .subscribe();
+}
+
+async function loadEntries() {
+  const { data, error } = await supabase.from('ledger_entries').select('*').order('date', { ascending: false });
+  if (error) { showToast('Load error: ' + error.message); return; }
+  entries = data || [];
+  populateMonthFilter();
+  renderAll();
+}
+
+function populateMonthFilter() {
+  const sel = document.getElementById('monthFilter');
+  const months = Array.from(new Set(entries.filter(e => e.status !== 'pending_review').map(e => monthKey(e.date)))).sort().reverse();
+  const current = sel.value || monthFilter;
+  sel.innerHTML = '<option value="all">All time</option>' + months.map(m => `<option value="${m}">${fmtMonthLabel(m)}</option>`).join('');
+  if (months.includes(current) || current === 'all') sel.value = current;
+  monthFilter = sel.value;
+}
+function onMonthChange() { monthFilter = document.getElementById('monthFilter').value; renderAll(); }
+function setTypeFilter(t) {
+  typeFilter = t;
+  ['pillAll', 'pillIncome', 'pillExpense'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(t === 'all' ? 'pillAll' : t === 'income' ? 'pillIncome' : 'pillExpense').classList.add('active');
+  renderList();
+}
+
+function confirmedInScope() {
+  return entries.filter(e => e.status === 'confirmed').filter(e => monthFilter === 'all' ? true : monthKey(e.date) === monthFilter);
+}
+
+function renderAll() {
+  renderReviewBanner();
+  renderStrip();
+  renderCategoryChart();
+  renderTrendChart();
+  renderList();
+}
+
+function renderReviewBanner() {
+  const pending = entries.filter(e => e.status === 'pending_review');
+  const banner = document.getElementById('reviewBanner');
+  if (pending.length === 0) {
+    banner.style.display = 'none';
+    document.getElementById('reviewSection').style.display = 'none';
+    return;
+  }
+  banner.style.display = 'flex';
+  document.getElementById('reviewBannerText').textContent = `${pending.length} item${pending.length === 1 ? '' : 's'} found in this week's email scan`;
+  if (reviewOpen) renderReviewList(pending);
+}
+function toggleReviewSection() {
+  reviewOpen = !reviewOpen;
+  const pending = entries.filter(e => e.status === 'pending_review');
+  document.getElementById('reviewSection').style.display = reviewOpen ? 'block' : 'none';
+  if (reviewOpen) renderReviewList(pending);
+}
+function renderReviewList(pending) {
+  document.getElementById('reviewList').innerHTML = pending.map(e => `
+    <div class="review-item">
+      <div class="review-top">
+        <div>
+          <div class="review-desc">${escapeHtml(e.description)}</div>
+          <div class="review-meta">${fmtDateShort(e.date)} · ${escapeHtml(e.category)}${e.source_snippet ? ` · "${escapeHtml(e.source_snippet.slice(0, 60))}${e.source_snippet.length > 60 ? '…' : ''}"` : ''}</div>
+        </div>
+        <div class="review-amount" style="color:${e.type === 'income' ? COBALT : COPPER}">${e.type === 'income' ? '+' : '−'}${fmtMoney(e.amount)}</div>
+      </div>
+      <div class="review-actions">
+        <button class="approve" onclick="approveReview('${e.id}')">Confirm</button>
+        <button onclick="openRow('${e.id}')">Edit</button>
+        <button class="dismiss" onclick="dismissReview('${e.id}')">Dismiss</button>
+      </div>
+    </div>
+  `).join('');
+}
+async function approveReview(id) {
+  const { error } = await supabase.from('ledger_entries').update({ status: 'confirmed' }).eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast('Confirmed');
+}
+async function dismissReview(id) {
+  const { error } = await supabase.from('ledger_entries').update({ status: 'dismissed' }).eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast('Dismissed');
+}
+
+function renderStrip() {
+  const scoped = confirmedInScope();
+  const income = scoped.filter(e => e.type === 'income').reduce((a, e) => a + Number(e.amount), 0);
+  const expense = scoped.filter(e => e.type === 'expense').reduce((a, e) => a + Number(e.amount), 0);
+  const net = income - expense;
+  document.getElementById('statIncome').textContent = fmtMoney(income);
+  document.getElementById('statExpense').textContent = fmtMoney(expense);
+  const netEl = document.getElementById('statNet');
+  netEl.textContent = fmtMoney(net);
+  netEl.style.color = net >= 0 ? SUCCESS : DANGER;
+}
+
+function renderCategoryChart() {
+  const scoped = confirmedInScope().filter(e => e.type === 'expense');
+  const byCat = {};
+  scoped.forEach(e => { byCat[e.category] = (byCat[e.category] || 0) + Number(e.amount); });
+  const labels = Object.keys(byCat);
+  const canvas = document.getElementById('categoryChart');
+  document.getElementById('categoryEmpty').style.display = labels.length === 0 ? 'block' : 'none';
+  canvas.style.display = labels.length === 0 ? 'none' : 'block';
+  if (categoryChart) categoryChart.destroy();
+  if (labels.length === 0) return;
+  categoryChart = new Chart(canvas, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data: labels.map(l => byCat[l]), backgroundColor: CATEGORY_COLORS, borderWidth: 0 }] },
+    options: { plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 11 } } } }, cutout: '60%' }
+  });
+}
+
+function renderTrendChart() {
+  const confirmed = entries.filter(e => e.status === 'confirmed');
+  const byMonth = {};
+  confirmed.forEach(e => {
+    const k = monthKey(e.date);
+    if (!byMonth[k]) byMonth[k] = { income: 0, expense: 0 };
+    byMonth[k][e.type] += Number(e.amount);
+  });
+  const months = Object.keys(byMonth).sort().slice(-8);
+  const canvas = document.getElementById('trendChart');
+  if (trendChart) trendChart.destroy();
+  trendChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: months.map(fmtMonthLabel),
+      datasets: [
+        { label: 'Income', data: months.map(m => byMonth[m].income), backgroundColor: COBALT, borderRadius: 3 },
+        { label: 'Expense', data: months.map(m => byMonth[m].expense), backgroundColor: COPPER, borderRadius: 3 },
+      ]
+    },
+    options: {
+      plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 11 } } } },
+      scales: { y: { ticks: { callback: v => '$' + (v >= 1000 ? (v / 1000) + 'k' : v), font: { size: 10 } }, grid: { color: LINE } }, x: { grid: { display: false }, ticks: { font: { size: 10 } } } }
+    }
+  });
+}
+
+function renderList() {
+  let list = confirmedInScope();
+  if (typeFilter !== 'all') list = list.filter(e => e.type === typeFilter);
+  list = list.sort((a, b) => b.date.localeCompare(a.date));
+  const wrap = document.getElementById('listWrap');
+  if (list.length === 0) {
+    wrap.innerHTML = `<div class="empty">${entries.filter(e => e.status === 'confirmed').length === 0 ? 'No entries yet — tap + Add to log your first one.' : 'Nothing matches this filter.'}</div>`;
+    return;
+  }
+  wrap.innerHTML = list.map(e => `
+    <div class="row" onclick="openRow('${e.id}')">
+      <div class="row-date">${fmtDateShort(e.date)}</div>
+      <div class="row-info">
+        <div class="row-desc">${escapeHtml(e.description)}</div>
+        <div class="row-meta">${escapeHtml(e.category)}${e.client_ref ? ' · ' + escapeHtml(e.client_ref) : ''}${e.recurring ? ' · recurring' : ''}${e.source === 'email_scan' ? ' · auto-detected' : ''}</div>
+      </div>
+      <div class="row-amount" style="color:${e.type === 'income' ? COBALT : COPPER}">${e.type === 'income' ? '+' : '−'}${fmtMoney(e.amount)}</div>
+    </div>
+  `).join('');
+}
+
+function populateCategorySelect() {
+  const cats = formType === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  document.getElementById('f_category').innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+function setFormType(t) {
+  formType = t;
+  document.getElementById('typeBtnIncome').className = t === 'income' ? 'active-income' : '';
+  document.getElementById('typeBtnExpense').className = t === 'expense' ? 'active-expense' : '';
+  populateCategorySelect();
+}
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'New entry';
+  document.getElementById('deleteBtn').style.display = 'none';
+  document.getElementById('f_date').value = todayStr();
+  document.getElementById('f_amount').value = '';
+  document.getElementById('f_description').value = '';
+  document.getElementById('f_client_ref').value = '';
+  document.getElementById('f_recurring').checked = false;
+  setFormType('income');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+window.openRow = function (id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit entry';
+  document.getElementById('deleteBtn').style.display = 'block';
+  document.getElementById('f_date').value = e.date;
+  document.getElementById('f_amount').value = e.amount;
+  document.getElementById('f_description').value = e.description;
+  document.getElementById('f_client_ref').value = e.client_ref || '';
+  document.getElementById('f_recurring').checked = !!e.recurring;
+  setFormType(e.type);
+  document.getElementById('f_category').value = e.category;
+  document.getElementById('modalOverlay').classList.add('open');
+};
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+async function saveEntry() {
+  const amount = parseFloat(document.getElementById('f_amount').value);
+  const description = document.getElementById('f_description').value.trim();
+  if (!description || !amount || amount <= 0) { showToast('Enter a description and amount.'); return; }
+  const payload = {
+    date: document.getElementById('f_date').value || todayStr(),
+    type: formType,
+    category: document.getElementById('f_category').value,
+    description,
+    amount,
+    client_ref: document.getElementById('f_client_ref').value.trim() || null,
+    recurring: document.getElementById('f_recurring').checked,
+  };
+  try {
+    if (editingId) {
+      payload.status = 'confirmed';
+      const { error } = await supabase.from('ledger_entries').update(payload).eq('id', editingId);
+      if (error) throw error;
+      showToast('Updated');
+    } else {
+      payload.owner_id = currentUserId;
+      payload.source = 'manual';
+      payload.status = 'confirmed';
+      const { error } = await supabase.from('ledger_entries').insert(payload);
+      if (error) throw error;
+      showToast('Added');
+    }
+    closeModal();
+  } catch (e) {
+    showToast('Error: ' + e.message);
+  }
+}
+async function deleteEntry() {
+  if (!editingId) return;
+  if (!confirm('Delete this entry?')) return;
+  const { error } = await supabase.from('ledger_entries').delete().eq('id', editingId);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast('Deleted');
+  closeModal();
+}
+
+function exportCSV() {
+  let list = confirmedInScope();
+  if (typeFilter !== 'all') list = list.filter(e => e.type === typeFilter);
+  const rows = [['Date', 'Type', 'Category', 'Description', 'Client', 'Amount', 'Recurring']];
+  list.forEach(e => rows.push([e.date, e.type, e.category, e.description, e.client_ref || '', e.amount, e.recurring ? 'yes' : '']));
+  const csv = Papa.unparse(rows);
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ledger-${monthFilter}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
