@@ -1,0 +1,16 @@
+{
+  "name": "Ledger — Optimized Hub",
+  "short_name": "Ledger",
+  "start_url": "./ledger.html",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "https://optimizedhubllc-prog.github.io/optimized-hub-assets/OH_Logo_Dark%20%282%29.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
