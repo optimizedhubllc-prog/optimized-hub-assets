@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Optimized Hub — Database Reactivation ROI Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cobalt:#2563EB;
+    --copper:#C17B3C;
+    --copper-light:#D4933F;
+    --ink:#111827;
+    --pearl:#F8FAFC;
+    --line: rgba(17,24,39,0.08);
+    --shadow: 0 20px 50px -20px rgba(17,24,39,0.25);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    font-family:'Inter', -apple-system, sans-serif;
+    background:var(--pearl);
+    color:var(--ink);
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    min-height:100vh;
+  }
+  h1,h2,h3,.brand{font-family:'Plus Jakarta Sans', sans-serif;}
+
+  .hero{
+    background: radial-gradient(circle at 20% 20%, #1e3a8a 0%, var(--ink) 55%, #0b0f19 100%);
+    color:#fff;
+    padding: 48px 24px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 85% 15%, rgba(193,123,60,0.35) 0%, transparent 40%),
+      radial-gradient(circle at 10% 90%, rgba(37,99,235,0.35) 0%, transparent 40%);
+    pointer-events:none;
+  }
+  .wrap{max-width:760px; margin:0 auto; position:relative; z-index:1;}
+  .brandbar{display:flex; align-items:center; gap:10px; margin-bottom:36px;}
+  .node-mark{width:30px; height:30px; flex-shrink:0;}
+  .brand{font-weight:800; font-size:17px; letter-spacing:-0.01em;}
+  .tagline{font-size:11px; color:var(--copper-light); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-top:1px;}
+
+  .hero h1{font-size:clamp(28px,4.5vw,42px); font-weight:800; line-height:1.15; letter-spacing:-0.02em; max-width:620px;}
+  .hero h1 span{color:var(--copper-light);}
+  .hero p{margin-top:16px; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.72); max-width:520px;}
+
+  .card{
+    background:#fff;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    margin: -40px auto 0;
+    max-width:760px;
+    position:relative; z-index:2;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .card-inner{padding:32px 28px;}
+  @media(min-width:640px){ .card-inner{padding:40px 44px;} }
+
+  .field{margin-bottom:22px;}
+  .field label{display:flex; justify-content:space-between; align-items:baseline; font-size:13px; font-weight:600; color:#4b5563; margin-bottom:10px;}
+  .field label .val{font-family:'Plus Jakarta Sans'; font-weight:800; color:var(--cobalt); font-size:16px;}
+  input[type=range]{
+    width:100%; height:6px; border-radius:99px; appearance:none;
+    background: linear-gradient(90deg, var(--cobalt) 0%, var(--cobalt) var(--pct,50%), #e5e7eb var(--pct,50%), #e5e7eb 100%);
+    outline:none; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:4px solid var(--cobalt); cursor:pointer;
+    box-shadow:0 2px 6px rgba(37,99,235,0.4);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:22px; height:22px; border-radius:50%;
+    background:#fff; border:4px solid var(--cobalt); cursor:pointer;
+  }
+
+  .result{
+    margin-top:8px;
+    background: linear-gradient(135deg, #eff6ff 0%, #fdf6ec 100%);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 24px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media(max-width:480px){ .result{grid-template-columns:1fr;} }
+  .stat-label{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#6b7280; margin-bottom:6px;}
+  .stat-value{font-family:'Plus Jakarta Sans'; font-weight:800; font-size:26px; color:var(--ink);}
+  .stat-value.copper{color:var(--copper);}
+  .stat-value.cobalt{color:var(--cobalt);}
+
+  .fineprint{font-size:12px; color:#9ca3af; line-height:1.6; margin-top:18px;}
+
+  .cta{
+    margin-top:28px; padding-top:26px; border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .cta h3{font-size:19px; font-weight:700; margin-bottom:8px;}
+  .cta p{font-size:14px; color:#6b7280; margin-bottom:20px; line-height:1.55;}
+  .btn{
+    display:inline-block; text-decoration:none;
+    background: var(--ink); color:#fff;
+    font-family:'Plus Jakarta Sans'; font-weight:700; font-size:15px;
+    padding:14px 30px; border-radius:12px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow:0 10px 24px -10px rgba(17,24,39,0.4);
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn span{color:var(--copper-light);}
+
+  footer{text-align:center; padding:32px 24px 48px; color:#9ca3af; font-size:12px;}
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="wrap">
+      <div class="brandbar">
+        <svg class="node-mark" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="8" r="5" fill="#C17B3C"/>
+          <circle cx="8" cy="30" r="5" fill="#2563EB"/>
+          <circle cx="32" cy="30" r="5" fill="#2563EB"/>
+          <line x1="20" y1="8" x2="8" y2="30" stroke="#60A5FA" stroke-width="1.5" opacity="0.7"/>
+          <line x1="20" y1="8" x2="32" y2="30" stroke="#60A5FA" stroke-width="1.5" opacity="0.7"/>
+          <line x1="8" y1="30" x2="32" y2="30" stroke="#60A5FA" stroke-width="1.5" opacity="0.7"/>
+        </svg>
+        <div>
+          <div class="brand">OPTIMIZED HUB</div>
+          <div class="tagline">Engineered Logic. Systematic Growth.</div>
+        </div>
+      </div>
+      <h1 id="headline">What's Sitting <span>Dormant</span> in Your Database Right Now?</h1>
+      <p>Most loan officers are sitting on hundreds of old leads and past clients who already know their name — and paying for new leads instead of reactivating the ones they already have. Drag the sliders below to see the pipeline hiding in yours.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+
+      <div class="field">
+        <label>Leads / past clients in your database <span class="val" id="leadsVal">750</span></label>
+        <input type="range" id="leads" min="100" max="5000" step="50" value="750">
+      </div>
+
+      <div class="field">
+        <label>Average commission per closed deal <span class="val" id="dealVal">$6,000</span></label>
+        <input type="range" id="deal" min="1000" max="15000" step="250" value="6000">
+      </div>
+
+      <div class="result">
+        <div>
+          <div class="stat-label">Estimated Appointments Recovered</div>
+          <div class="stat-value cobalt" id="apptOut">—</div>
+        </div>
+        <div>
+          <div class="stat-label">Estimated Deals Closed</div>
+          <div class="stat-value" id="dealsOut">—</div>
+        </div>
+        <div>
+          <div class="stat-label">Recoverable Pipeline Value</div>
+          <div class="stat-value copper" id="pipelineOut">—</div>
+        </div>
+        <div>
+          <div class="stat-label">Monthly Cost, Fully Automated</div>
+          <div class="stat-value" id="costOut">$197–$479</div>
+        </div>
+      </div>
+
+      <p class="fineprint">Estimate uses conservative industry benchmarks for AI-driven database reactivation campaigns (≈4% of contacted dormant leads book an appointment, ≈20% of appointments close) — not a guarantee, and not specific to your actual database. Real results depend on list quality and follow-up speed.</p>
+
+      <div class="cta">
+        <h3>Want the real number for <span id="prospectName">your</span> database?</h3>
+        <p>Free audit — I'll run your actual list through the same model and show you what it's really worth before you spend a dollar.</p>
+        <a class="btn" href="mailto:pedro@optimizedhub.com?subject=Free%20Database%20Audit%20Request" id="ctaBtn">Get My Free Audit <span>→</span></a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>Optimized Hub Media LLC — Tampa, FL</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  if (name) {
+    document.getElementById('headline').innerHTML = `Hey ${name.split(' ')[0]}, What's Sitting <span>Dormant</span> in Your Database Right Now?`;
+    document.getElementById('prospectName').textContent = name.split(' ')[0] + "'s";
+    document.getElementById('ctaBtn').href = `mailto:pedro@optimizedhub.com?subject=${encodeURIComponent('Free Database Audit Request — ' + name)}`;
+  }
+
+  const leadsEl = document.getElementById('leads');
+  const dealEl = document.getElementById('deal');
+  const leadsVal = document.getElementById('leadsVal');
+  const dealVal = document.getElementById('dealVal');
+  const apptOut = document.getElementById('apptOut');
+  const dealsOut = document.getElementById('dealsOut');
+  const pipelineOut = document.getElementById('pipelineOut');
+
+  function fmtMoney(n){
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function updateTrack(el){
+    const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+    el.style.setProperty('--pct', pct + '%');
+  }
+
+  function calc(){
+    const leads = parseInt(leadsEl.value, 10);
+    const deal = parseInt(dealEl.value, 10);
+    leadsVal.textContent = leads.toLocaleString('en-US');
+    dealVal.textContent = fmtMoney(deal);
+
+    const appts = Math.round(leads * 0.04);
+    const deals = Math.max(1, Math.round(appts * 0.20));
+    const pipeline = deals * deal;
+
+    apptOut.textContent = appts.toLocaleString('en-US');
+    dealsOut.textContent = deals.toLocaleString('en-US');
+    pipelineOut.textContent = fmtMoney(pipeline);
+
+    updateTrack(leadsEl);
+    updateTrack(dealEl);
+  }
+
+  leadsEl.addEventListener('input', calc);
+  dealEl.addEventListener('input', calc);
+  calc();
+</script>
+
+</body>
+</html>
