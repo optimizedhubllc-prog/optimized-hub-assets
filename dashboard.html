@@ -394,9 +394,12 @@ function initWhatIfCalculator(audit, name){
   const dealsOut = document.getElementById('calcDealsOut');
   const pipelineOut = document.getElementById('calcPipelineOut');
 
-  // Seed sliders from the audit's own numbers when available, otherwise sensible defaults
-  const seedLeads = Number(audit.dbSize) || 750;
-  const seedDeal = Number(audit.avgDealSize) || 6000;
+  // Seed sliders from the audit's own numbers when available, otherwise sensible defaults.
+  // Database size isn't sent directly — approximate it the same way the audit itself does
+  // (8 months of accumulated leads at the reported monthly volume), so the slider lines up
+  // with the "Cold contacts with no reactivation system" line item above.
+  const seedLeads = window.__oh_leadsMonthly ? window.__oh_leadsMonthly * 8 : 750;
+  const seedDeal = window.__oh_avgCommission || 6000;
   leadsEl.value = Math.min(Math.max(seedLeads, 100), 5000);
   dealEl.value = Math.min(Math.max(seedDeal, 1000), 15000);
 
@@ -520,14 +523,16 @@ function init(){
     winsList.appendChild(card);
   });
 
+  window.__oh_leadsMonthly = Number(data.leads_monthly) || 0;
+  window.__oh_avgCommission = Number(data.avg_commission) || 0;
   initWhatIfCalculator(audit, data.name);
 
   const ctaBtn = document.getElementById('cta-btn');
   const subjectName = data.name ? ' — ' + data.name : '';
   ctaBtn.href = 'mailto:pedro@optimizedhub.com?subject=' + encodeURIComponent('Talk About My Audit Results' + subjectName);
 
-  if(audit.rateHeldUntil){
-    document.getElementById('cta-expiry').textContent = 'Your quoted rate is held until ' + audit.rateHeldUntil + '.';
+  if(audit.creditExpiry){
+    document.getElementById('cta-expiry').textContent = 'Your results are current through ' + audit.creditExpiry + '.';
   }
 }
 
