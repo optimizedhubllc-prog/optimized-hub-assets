@@ -142,7 +142,7 @@
     background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;
   }
   .calc-field{margin-bottom:22px;}
-  .calc-field label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;}
+  .calc-field label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;}
   .calc-field label .val{font-family:'Plus Jakarta Sans';font-weight:800;color:var(--cobalt);font-size:16px;}
   input[type=range]{
     width:100%;height:6px;border-radius:99px;appearance:none;
@@ -184,7 +184,7 @@
     display:inline-block;background:var(--cobalt);color:#fff;text-decoration:none;
     font-weight:700;font-size:15px;padding:16px 36px;border-radius:8px;
   }
-  .cta-expiry{font-size:12px;color:#9CA3AF;margin-top:18px;}
+  .cta-card p.cta-expiry{font-size:12px;color:#9CA3AF;margin:18px auto 0;}
 
   footer{max-width:920px;margin:0 auto;padding:32px 24px 60px;text-align:center;}
   footer p{margin:0;font-size:11.5px;color:var(--muted);}
@@ -246,7 +246,7 @@
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow" id="hero-eyebrow">Deep Dive Audit</p>
+      <p class="eyebrow" id="hero-eyebrow" data-i18n="eyebrow">Deep Dive Audit</p>
       <h1 id="hero-title">Your results are in.</h1>
       <p class="hero-sub" id="hero-sub"></p>
 
@@ -256,7 +256,7 @@
             <circle cx="70" cy="70" r="58" fill="none" stroke="#E5E9F0" stroke-width="12"/>
             <circle id="gauge-arc" cx="70" cy="70" r="58" fill="none" stroke="#2563EB" stroke-width="12" stroke-linecap="round" transform="rotate(-90 70 70)"/>
             <text x="70" y="66" text-anchor="middle" class="gauge-num" id="gauge-number">0</text>
-            <text x="70" y="86" text-anchor="middle" class="gauge-label">AI Readiness</text>
+            <text x="70" y="86" text-anchor="middle" class="gauge-label" id="gauge-label">AI Readiness</text>
           </svg>
           <div class="gauge-caption" id="gauge-caption">Score</div>
         </div>
@@ -264,8 +264,8 @@
           <h2 id="meta-name">—</h2>
           <p id="meta-role">—</p>
           <div class="meta-row">
-            <div class="meta-item">Delivered<b id="meta-delivered">—</b></div>
-            <div class="meta-item">Report type<b>Deep Dive Audit</b></div>
+            <div class="meta-item"><span data-i18n="delivered">Delivered</span><b id="meta-delivered">—</b></div>
+            <div class="meta-item"><span data-i18n="reportType">Report type</span><b data-i18n="eyebrow">Deep Dive Audit</b></div>
           </div>
         </div>
       </div>
@@ -275,11 +275,11 @@
   <section class="section">
     <div class="stat-grid">
       <div class="stat-card copper">
-        <p class="stat-label">Revenue leaking monthly</p>
+        <p class="stat-label" data-i18n="statMonthly">Revenue leaking monthly</p>
         <p class="stat-value" id="stat-monthly">—</p>
       </div>
       <div class="stat-card cobalt">
-        <p class="stat-label">Hours drained weekly</p>
+        <p class="stat-label" data-i18n="statHours">Hours drained weekly</p>
         <p class="stat-value" id="stat-hours">—</p>
       </div>
     </div>
@@ -287,83 +287,165 @@
 
   <section class="section">
     <div class="section-head">
-      <p class="section-eyebrow">Where it's going</p>
-      <h2>Missed revenue breakdown</h2>
+      <p class="section-eyebrow" data-i18n="whereGoing">Where it's going</p>
+      <h2 data-i18n="revBreakdown">Missed revenue breakdown</h2>
     </div>
     <div class="item-list" id="revenue-list"></div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="section-eyebrow">Where it's going</p>
-      <h2>Time drain breakdown</h2>
+      <p class="section-eyebrow" data-i18n="whereGoing">Where it's going</p>
+      <h2 data-i18n="timeBreakdown">Time drain breakdown</h2>
     </div>
     <div class="item-list" id="time-list"></div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="section-eyebrow">Ranked by impact</p>
-      <h2>Your quick wins</h2>
+      <p class="section-eyebrow" data-i18n="rankedByImpact">Ranked by impact</p>
+      <h2 data-i18n="yourWins">Your quick wins</h2>
     </div>
     <div id="wins-list"></div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <p class="section-eyebrow">Model it yourself</p>
-      <h2>What Reactivation Could Recover</h2>
+      <p class="section-eyebrow" data-i18n="modelIt">Model it yourself</p>
+      <h2 data-i18n="calcTitle">What Reactivation Could Recover</h2>
     </div>
     <div class="calc-card">
       <div class="calc-field">
-        <label>Leads / past clients in your database <span class="val" id="calcLeadsVal">750</span></label>
+        <label><span data-i18n="calcLeadsLabel">Leads / past clients in your database</span> <span class="val" id="calcLeadsVal">750</span></label>
         <input type="range" id="calcLeads" min="100" max="5000" step="50" value="750">
       </div>
       <div class="calc-field">
-        <label>Average commission per closed deal <span class="val" id="calcDealVal">$6,000</span></label>
+        <label><span data-i18n="calcDealLabel">Average commission per closed deal</span> <span class="val" id="calcDealVal">$6,000</span></label>
         <input type="range" id="calcDeal" min="1000" max="15000" step="250" value="6000">
       </div>
       <div class="calc-result">
         <div>
-          <p class="stat-label">Est. Appointments</p>
+          <p class="stat-label" data-i18n="calcAppt">Est. Appointments</p>
           <p class="stat-value cobalt" id="calcApptOut">—</p>
         </div>
         <div>
-          <p class="stat-label">Est. Deals Closed</p>
+          <p class="stat-label" data-i18n="calcDeals">Est. Deals Closed</p>
           <p class="stat-value" id="calcDealsOut">—</p>
         </div>
         <div>
-          <p class="stat-label">Recoverable Pipeline</p>
+          <p class="stat-label" data-i18n="calcPipeline">Recoverable Pipeline</p>
           <p class="stat-value copper" id="calcPipelineOut">—</p>
         </div>
       </div>
-      <p class="calc-fineprint">Estimate uses the same conservative benchmarks behind this audit (~4% of contacted dormant leads book an appointment, ~20% of appointments close) — not a guarantee, and refined further once we run your actual list.</p>
+      <p class="calc-fineprint" data-i18n="calcFine">Estimate uses the same conservative benchmarks behind this audit (~4% of contacted dormant leads book an appointment, ~20% of appointments close) — not a guarantee, and refined further once we run your actual list.</p>
     </div>
   </section>
 
   <section class="cta-section">
     <div class="cta-card">
       <p class="cta-eyebrow">Database Reactivation</p>
-      <h2>Ready to fix what we found?</h2>
-      <p>Database Reactivation runs $197–$479/mo depending on your network and whether you add full CRM access — no setup fee on any tier, cancel anytime. I'll walk you through your results and the right fit for you.</p>
-      <a href="#" class="cta-btn" id="cta-btn">Talk About Your Results →</a>
+      <h2 data-i18n="ctaTitle">Ready to fix what we found?</h2>
+      <p data-i18n="ctaBody">Database Reactivation is $379/mo, or $479/mo with full CRM access. No setup fee, and you can cancel anytime with 14 days' notice. Ask about the 30-day pilot trial and I'll walk you through your results and the right fit.</p>
+      <a href="#" class="cta-btn" id="cta-btn" data-i18n="ctaBtn">Talk About Your Results →</a>
       <p class="cta-expiry" id="cta-expiry"></p>
     </div>
   </section>
 
   <footer>
     <p>OPTIMIZED HUB LLC &nbsp;&middot;&nbsp; <span class="tag">Engineered Logic. Systematic Growth.</span></p>
-    <p style="margin-top:6px;">This report is confidential and prepared exclusively for you. Questions? Reply to your audit email.</p>
+    <p style="margin-top:6px;" data-i18n="footerNote">This report is confidential and prepared exclusively for you. Questions? Reply to your audit email.</p>
   </footer>
 
 </div>
 
 <div id="error-state">
-  <h2>We couldn't load this report.</h2>
+  <h2>We couldn't load this report. / No pudimos cargar este reporte.</h2>
   <p>This link may be incomplete or expired. Reply to your audit email and we'll resend it right away.</p>
+  <p>Es posible que este enlace est&eacute; incompleto o haya expirado. Responde a tu correo de auditor&iacute;a y te lo reenviamos de inmediato.</p>
 </div>
 
 <script>
+const I18N = {
+  en: {
+    eyebrow: 'Deep Dive Audit',
+    gaugeLabel: 'AI Readiness',
+    delivered: 'Delivered',
+    reportType: 'Report type',
+    statMonthly: 'Revenue leaking monthly',
+    statHours: 'Hours drained weekly',
+    whereGoing: "Where it's going",
+    revBreakdown: 'Missed revenue breakdown',
+    timeBreakdown: 'Time drain breakdown',
+    rankedByImpact: 'Ranked by impact',
+    yourWins: 'Your quick wins',
+    modelIt: 'Model it yourself',
+    calcTitle: 'What Reactivation Could Recover',
+    calcLeadsLabel: 'Leads / past clients in your database',
+    calcDealLabel: 'Average commission per closed deal',
+    calcAppt: 'Est. Appointments',
+    calcDeals: 'Est. Deals Closed',
+    calcPipeline: 'Recoverable Pipeline',
+    calcFine: 'Estimate uses the same conservative benchmarks behind this audit (~4% of contacted dormant leads book an appointment, ~20% of appointments close) \u2014 not a guarantee, and refined further once we run your actual list.',
+    ctaTitle: 'Ready to fix what we found?',
+    ctaBody: "Database Reactivation is $379/mo, or $479/mo with full CRM access. No setup fee, and you can cancel anytime with 14 days' notice. Ask about the 30-day pilot trial and I'll walk you through your results and the right fit.",
+    ctaBtn: 'Talk About Your Results \u2192',
+    ctaSubject: 'Talk About My Audit Results',
+    footerNote: 'This report is confidential and prepared exclusively for you. Questions? Reply to your audit email.',
+    perMonth: '/mo', perYear: '/yr', hrsWk: 'hrs/wk', hrs: 'hrs',
+    totalAnnual: 'Total \u2014 annualized', totalWeek: 'Total per week',
+    impact: 'Impact', deploy: 'Deploy time',
+    critical: 'CRITICAL', high: 'HIGH',
+    capHigh: 'Ahead of most peers', capMid: 'Real room to grow', capLow: 'Highest opportunity zone',
+    docTitle: (n) => (n || 'Your') + '\u2019s Deep Dive Audit \u2014 Optimized Hub',
+    heroTitle: (first) => first ? first + ', your results are in.' : 'Your results are in.',
+    heroSub: (b) => 'A full breakdown of where ' + (b || 'your business') + ' is losing revenue, and the highest-impact automations to fix it.',
+    expiry: (d) => 'Your results are current through ' + d + '.'
+  },
+  es: {
+    eyebrow: 'Auditor\u00eda Deep Dive',
+    gaugeLabel: 'Preparaci\u00f3n para IA',
+    delivered: 'Entregado',
+    reportType: 'Tipo de reporte',
+    statMonthly: 'Ingresos que se pierden al mes',
+    statHours: 'Horas perdidas por semana',
+    whereGoing: 'A d\u00f3nde se va',
+    revBreakdown: 'Desglose de ingresos perdidos',
+    timeBreakdown: 'Desglose del tiempo perdido',
+    rankedByImpact: 'Ordenadas por impacto',
+    yourWins: 'Tus mejoras r\u00e1pidas',
+    modelIt: 'Haz tus propios n\u00fameros',
+    calcTitle: 'Lo que podr\u00eda recuperar la reactivaci\u00f3n',
+    calcLeadsLabel: 'Leads / clientes anteriores en tu base de datos',
+    calcDealLabel: 'Comisi\u00f3n promedio por cierre',
+    calcAppt: 'Citas estimadas',
+    calcDeals: 'Cierres estimados',
+    calcPipeline: 'Pipeline recuperable',
+    calcFine: 'La estimaci\u00f3n usa los mismos par\u00e1metros conservadores de esta auditor\u00eda (~4% de los leads inactivos contactados agenda una cita y ~20% de las citas cierra). No es una garant\u00eda y se afina cuando trabajamos con tu lista real.',
+    ctaTitle: '\u00bfListo para resolver lo que encontramos?',
+    ctaBody: 'Database Reactivation cuesta $379/mes, o $479/mes con acceso completo al CRM. Sin cuota de instalaci\u00f3n y puedes cancelar cuando quieras con 14 d\u00edas de aviso. Pregunta por la prueba piloto de 30 d\u00edas y revisamos juntos tus resultados y la mejor opci\u00f3n para ti.',
+    ctaBtn: 'Hablemos de tus resultados \u2192',
+    ctaSubject: 'Hablemos de los resultados de mi auditor\u00eda',
+    footerNote: 'Este reporte es confidencial y fue preparado exclusivamente para ti. \u00bfPreguntas? Responde a tu correo de auditor\u00eda.',
+    perMonth: '/mes', perYear: '/a\u00f1o', hrsWk: 'hrs/sem', hrs: 'hrs',
+    totalAnnual: 'Total \u2014 anualizado', totalWeek: 'Total por semana',
+    impact: 'Impacto', deploy: 'Tiempo de implementaci\u00f3n',
+    critical: 'CR\u00cdTICO', high: 'ALTO',
+    capHigh: 'Por delante de la mayor\u00eda', capMid: 'Mucho espacio para crecer', capLow: 'Mayor zona de oportunidad',
+    docTitle: (n) => 'Auditor\u00eda Deep Dive de ' + (n || 'tu negocio') + ' \u2014 Optimized Hub',
+    heroTitle: (first) => first ? first + ', tus resultados est\u00e1n listos.' : 'Tus resultados est\u00e1n listos.',
+    heroSub: (b) => 'Un desglose completo de d\u00f3nde ' + (b || 'tu negocio') + ' est\u00e1 perdiendo ingresos y las automatizaciones de mayor impacto para resolverlo.',
+    expiry: (d) => 'Tus resultados est\u00e1n vigentes hasta el ' + d + '.'
+  }
+};
+let L = 'en';
+function t(k){ const v = (I18N[L] && I18N[L][k]); return v !== undefined ? v : I18N.en[k]; }
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
 function fmtMoney(n){
   return '$' + Number(n || 0).toLocaleString('en-US');
 }
@@ -375,9 +457,15 @@ function scoreColor(score){
 }
 
 function scoreCaption(score){
-  if(score >= 60) return 'Ahead of most peers';
-  if(score >= 35) return 'Real room to grow';
-  return 'Highest opportunity zone';
+  if(score >= 60) return t('capHigh');
+  if(score >= 35) return t('capMid');
+  return t('capLow');
+}
+
+function priorityLabel(p){
+  if(p === 'CRITICAL') return t('critical');
+  if(p === 'HIGH') return t('high');
+  return p;
 }
 
 function updateSliderTrack(el){
@@ -385,7 +473,7 @@ function updateSliderTrack(el){
   el.style.setProperty('--pct', pct + '%');
 }
 
-function initWhatIfCalculator(audit, name){
+function initWhatIfCalculator(){
   const leadsEl = document.getElementById('calcLeads');
   const dealEl = document.getElementById('calcDeal');
   const leadsVal = document.getElementById('calcLeadsVal');
@@ -394,10 +482,8 @@ function initWhatIfCalculator(audit, name){
   const dealsOut = document.getElementById('calcDealsOut');
   const pipelineOut = document.getElementById('calcPipelineOut');
 
-  // Seed sliders from the audit's own numbers when available, otherwise sensible defaults.
-  // Database size isn't sent directly — approximate it the same way the audit itself does
-  // (8 months of accumulated leads at the reported monthly volume), so the slider lines up
-  // with the "Cold contacts with no reactivation system" line item above.
+  // Seed sliders from the audit's own numbers when available (8 months of accumulated
+  // leads at the reported monthly volume), otherwise sensible defaults.
   const seedLeads = window.__oh_leadsMonthly ? window.__oh_leadsMonthly * 8 : 750;
   const seedDeal = window.__oh_avgCommission || 6000;
   leadsEl.value = Math.min(Math.max(seedLeads, 100), 5000);
@@ -426,6 +512,15 @@ function initWhatIfCalculator(audit, name){
   calc();
 }
 
+function decodePayload(encoded){
+  // Accept both standard and URL-safe base64. A "+" in a query string turns into a
+  // space, so map those back too.
+  let b64 = String(encoded).replace(/ /g, '+').replace(/-/g, '+').replace(/_/g, '/');
+  while(b64.length % 4) b64 += '=';
+  const json = decodeURIComponent(escape(atob(b64)));
+  return JSON.parse(json);
+}
+
 function init(){
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get('d');
@@ -436,21 +531,32 @@ function init(){
 
   let data;
   try{
-    const json = decodeURIComponent(escape(atob(encoded)));
-    data = JSON.parse(json);
+    data = decodePayload(encoded);
   }catch(e){
     document.getElementById('error-state').style.display = 'block';
     return;
   }
 
+  L = /^(spanish|espa)/i.test(String(data.language || '').trim()) ? 'es' : 'en';
+  document.documentElement.lang = L;
+
   const audit = data.audit || {};
   const score = Number(audit.score ?? 0);
 
   document.getElementById('report-root').style.display = 'block';
-  document.title = (data.name || 'Your') + '\u2019s Deep Dive Audit — Optimized Hub';
 
-  document.getElementById('hero-title').textContent = (data.name ? data.name.split(' ')[0] + ', your' : 'Your') + ' results are in.';
-  document.getElementById('hero-sub').textContent = 'A full breakdown of where ' + (data.business || 'your business') + ' is losing revenue, and the highest-impact automations to fix it.';
+  // Static text
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    const v = t(el.getAttribute('data-i18n'));
+    if(typeof v === 'string') el.textContent = v;
+  });
+  document.getElementById('gauge-label').textContent = t('gaugeLabel');
+
+  document.title = t('docTitle')(data.name);
+
+  const first = data.name ? String(data.name).split(' ')[0] : '';
+  document.getElementById('hero-title').textContent = t('heroTitle')(first);
+  document.getElementById('hero-sub').textContent = t('heroSub')(data.business);
 
   document.getElementById('meta-name').textContent = data.name || '—';
   document.getElementById('meta-role').textContent = [data.role, audit.market].filter(Boolean).join(' \u00b7 ') || '—';
@@ -476,33 +582,33 @@ function init(){
   });
 
   const missed = audit.missedRevenue || { monthly:0, annual:0, items:[] };
-  document.getElementById('stat-monthly').textContent = fmtMoney(missed.monthly) + '/mo';
+  document.getElementById('stat-monthly').textContent = fmtMoney(missed.monthly) + t('perMonth');
 
   const timeDrain = audit.timeDrain || { hoursPerWeek:0, items:[] };
-  document.getElementById('stat-hours').textContent = (timeDrain.hoursPerWeek || 0) + ' hrs';
+  document.getElementById('stat-hours').textContent = (timeDrain.hoursPerWeek || 0) + ' ' + t('hrs');
 
   const revList = document.getElementById('revenue-list');
   (missed.items || []).forEach(item => {
     const row = document.createElement('div');
     row.className = 'item-row';
-    row.innerHTML = '<span class="item-label">' + item.label + '</span><span class="item-value">' + fmtMoney(item.monthly) + '/mo</span>';
+    row.innerHTML = '<span class="item-label">' + esc(item.label) + '</span><span class="item-value">' + fmtMoney(item.monthly) + t('perMonth') + '</span>';
     revList.appendChild(row);
   });
   const revTotal = document.createElement('div');
   revTotal.className = 'item-row total';
-  revTotal.innerHTML = '<span class="item-label">Total \u2014 annualized</span><span class="item-value">' + fmtMoney(missed.annual) + '/yr</span>';
+  revTotal.innerHTML = '<span class="item-label">' + esc(t('totalAnnual')) + '</span><span class="item-value">' + fmtMoney(missed.annual) + t('perYear') + '</span>';
   revList.appendChild(revTotal);
 
   const timeList = document.getElementById('time-list');
   (timeDrain.items || []).forEach(item => {
     const row = document.createElement('div');
     row.className = 'item-row';
-    row.innerHTML = '<span class="item-label">' + item.name + '</span><span class="item-value">' + item.hours + ' hrs/wk</span>';
+    row.innerHTML = '<span class="item-label">' + esc(item.name) + '</span><span class="item-value">' + esc(item.hours) + ' ' + t('hrsWk') + '</span>';
     timeList.appendChild(row);
   });
   const timeTotal = document.createElement('div');
   timeTotal.className = 'item-row total';
-  timeTotal.innerHTML = '<span class="item-label">Total per week</span><span class="item-value">' + (timeDrain.hoursPerWeek || 0) + ' hrs</span>';
+  timeTotal.innerHTML = '<span class="item-label">' + esc(t('totalWeek')) + '</span><span class="item-value">' + (timeDrain.hoursPerWeek || 0) + ' ' + t('hrs') + '</span>';
   timeList.appendChild(timeTotal);
 
   const winsList = document.getElementById('wins-list');
@@ -512,27 +618,27 @@ function init(){
     const badgeClass = win.priority === 'CRITICAL' ? 'priority-critical' : 'priority-high';
     card.innerHTML =
       '<div class="win-top">' +
-        '<div class="win-rank"><span class="rank-num">' + win.rank + '</span><h3 class="win-title">' + win.title + '</h3></div>' +
-        '<span class="priority-badge ' + badgeClass + '">' + win.priority + '</span>' +
+        '<div class="win-rank"><span class="rank-num">' + esc(win.rank) + '</span><h3 class="win-title">' + esc(win.title) + '</h3></div>' +
+        '<span class="priority-badge ' + badgeClass + '">' + esc(priorityLabel(win.priority)) + '</span>' +
       '</div>' +
-      '<p class="win-detail">' + win.detail + '</p>' +
+      '<p class="win-detail">' + esc(win.detail) + '</p>' +
       '<div class="win-meta">' +
-        '<div class="win-meta-item">Impact<b>' + win.impact + '</b></div>' +
-        '<div class="win-meta-item">Deploy time<b>' + win.deploy + '</b></div>' +
+        '<div class="win-meta-item">' + esc(t('impact')) + '<b>' + esc(win.impact) + '</b></div>' +
+        '<div class="win-meta-item">' + esc(t('deploy')) + '<b>' + esc(win.deploy) + '</b></div>' +
       '</div>';
     winsList.appendChild(card);
   });
 
   window.__oh_leadsMonthly = Number(data.leads_monthly) || 0;
   window.__oh_avgCommission = Number(data.avg_commission) || 0;
-  initWhatIfCalculator(audit, data.name);
+  initWhatIfCalculator();
 
   const ctaBtn = document.getElementById('cta-btn');
-  const subjectName = data.name ? ' — ' + data.name : '';
-  ctaBtn.href = 'mailto:pedro@optimizedhub.com?subject=' + encodeURIComponent('Talk About My Audit Results' + subjectName);
+  const subjectName = data.name ? ' \u2014 ' + data.name : '';
+  ctaBtn.href = 'mailto:pedro@optimizedhub.com?subject=' + encodeURIComponent(t('ctaSubject') + subjectName);
 
   if(audit.creditExpiry){
-    document.getElementById('cta-expiry').textContent = 'Your results are current through ' + audit.creditExpiry + '.';
+    document.getElementById('cta-expiry').textContent = t('expiry')(audit.creditExpiry);
   }
 }
 
